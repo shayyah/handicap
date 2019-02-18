@@ -9,7 +9,7 @@ var fs=require('fs');
 //});
 User = require('../models/userModel.js');
 // Import short-id
-var path="~/sound/";
+var path="/sound/";
 // Import fs
 exports.login = function (req, res) {
   var phone=req.query.phone;
