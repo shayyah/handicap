@@ -1,18 +1,22 @@
 {
-  "name": "makfufin",
+  "name": "blind_support",
   "version": "1.0.0",
-  "description": "server for makfufin project",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
-  "author": "Salim Shebli",
-  "license": "ISC",
+  "description": "",
+  "main": "server.js",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.4",
     "express": "^4.16.4",
+    "gridfs-stream": "^1.1.1",
     "mongodb": "^3.1.13",
-    "short-id": "0.1.0-1",
-    "socket.io": "^2.2.0"
-  }
+    "mongoose": "^5.4.11",
+    "short-id": "0.1.0-1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Ali Habieb - Salim Shibly",
+  "license": "ISC"
 }
