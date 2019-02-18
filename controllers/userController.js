@@ -36,8 +36,8 @@ exports.register = function (req, res) {
     //  console.log('name   '+ req.body.name);
       CreateUserAndAddToDataBase(name,phone,password,sound,dateModified,function(myUser){
         if(myUser!=null)
-          res.json(myUser);
-        else res.send('error');
+          res.json(__dirname);
+        else res.send(__dirname);
       });
   }
 function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rdate,callback)
