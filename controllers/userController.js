@@ -9,7 +9,7 @@ var fs=require('fs');
 //});
 User = require('../models/userModel.js');
 // Import short-id
-var path="/sound/";
+var path="/app/sound/";
 // Import fs
 exports.login = function (req, res) {
   var phone=req.query.phone;
@@ -36,8 +36,8 @@ exports.register = function (req, res) {
     //  console.log('name   '+ req.body.name);
       CreateUserAndAddToDataBase(name,phone,password,sound,dateModified,function(myUser){
         if(myUser!=null)
-          res.json(__dirname);
-        else res.send(__dirname);
+          res.json(myUser);
+        else res.send('error');
       });
   }
 function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rdate,callback)
