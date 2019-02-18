@@ -18,16 +18,16 @@ exports.getlocations=function(req,res){
         };
         console.log(UserId);
         UserController.getUser(UserId,function(MyUser){
-          console.log(JSON.stringify(MyUser));
+      //    console.log(JSON.stringify(MyUser));
             if(MyUser!=null)
             {
-              console.log('1');
+    //          console.log('1');
                     GetLocationByUserLocation(UserLocation,MyUser,function(locations){
-                        console.log(locations.length);
+          //              console.log(locations.length);
                         if(locations!=null)
                         {
                             GetDeletedLocationsByDateModified(UserLocation,MyUser,function(deletedlocations){
-                              console.log(deletedlocations.length);
+                        //      console.log(deletedlocations.length);
                                 if(deletedlocations!=null)
                                 {
                                     UserController.ModifyUserDate(MyUser.id,new Date());
@@ -89,6 +89,25 @@ exports.changestate=function(req,res){
               });
           }
         };
+exports.getnearbylocation=function(req,res){
+  var id=req.query.id;
+  var UserLocation={
+    longitude:req.query.longitude,
+    latitude:req.query.latitude
+  };
+  UserController.getUser(UserId,function(MyUser){
+//    console.log(JSON.stringify(MyUser));
+      if(MyUser!=null)
+      {
+          GetNearbyUnapprovedLocations(UserLocation,function(locations){
+            if(locations!=null)
+              res.json({nearbyLocations:locations});
+            else res.send('error');
+          });
+      }
+      else res.send('error');
+    });
+}
 function GetAllLocations(callback)
     {
       Location.find({},function(err,result){
@@ -164,6 +183,29 @@ function GetAllLocations(callback)
         var maxlatitude=parseFloat(myLocation.latitude)+0.1;
         var query ={'longitude':{$gt:minLongitude,$lt:maxLongitude},
                 'latitude':{$gt:minlatitude,$lt:maxlatitude},'datemodified':{$gt:user.datemodified},'deleted':false};
+        console.log(query);
+        Location.find(query,function(err,result){
+          if(err)return callback(null);
+          console.log(result);
+          callback(result);
+        });
+
+  //      console.log(JSON.stringify(query));
+//        dbo.collection('locations').find(query).toArray(function(err,result){
+  //          if(err)return callback(null);
+//            callback(result);
+//        });
+      }
+      function GetNearbyUnapprovedLocations(myLocation,callback)
+      {
+        var minLongitude=parseFloat(myLocation.longitude-0.00025);
+        var maxLongitude=parseFloat(myLocation.longitude)+0.00025;
+        var minlatitude=parseFloat(myLocation.latitude-0.00025);
+        var maxlatitude=parseFloat(myLocation.latitude)+0.00025;
+        var query ={'longitude':{$gt:minLongitude,$lt:maxLongitude},
+                'latitude':{$gt:minlatitude,$lt:maxlatitude},
+                'approved':false,
+                'deleted':false};
         console.log(query);
         Location.find(query,function(err,result){
           if(err)return callback(null);

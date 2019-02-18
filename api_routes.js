@@ -56,6 +56,8 @@ router.route('/location')
   .get(locationController.getlocations)
   .post(locationController.addlocation)
   .put(locationController.changestate);
+router.route('/nearbylocation')
+  .get(locationController.getnearbylocation);
 
 // Export API routes
 module.exports = router;

@@ -52,10 +52,10 @@ function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rd
 
     //  console.log(JSON.stringify(User));
       fs.writeFile(path+user.id,rsound,(err)=>{
-        if(err)callback(null);
+        if(err)callback(err);
         user.sound=path+user.id;
         user.save(function(err){
-          if(err)callback(null);
+          if(err)callback(err);
           console.log('user inserted   '+JSON.stringify(user));
           callback(user);
         });
