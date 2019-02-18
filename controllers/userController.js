@@ -54,11 +54,11 @@ function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rd
     //  fs.writeFile(path+user.id,rsound,(err)=>{
   //      if(err)callback(err);
         user.sound=path+user.id;
-        user.save(function(err){
-          if(err)callback(err);
-          console.log('user inserted   '+JSON.stringify(user));
+//        user.save(function(err){
+//          if(err)callback(err);
+//          console.log('user inserted   '+JSON.stringify(user));
           callback(user);
-        });
+//        });
 //      });
     }
 exports.getUser=function(id,callback) {
