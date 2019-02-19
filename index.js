@@ -22,11 +22,11 @@ var db_uri = process.env.MONGOLAB_URI ||
     process.env.MONGOHQ_URL ||'mongodb://127.0.0.1:27017/blind_support_data';
 var db_params = { useNewUrlParser : true };
 mongoose.connect(db_uri, db_params);
-//ali comment
+
 var db = mongoose.connection;
 // Setup server port
 var port = process.env.PORT || 3000;
-//salimComment test
+
 // Send message for default URL
 app.get('/', (req, res) => res.send('Blind support server is running'));
 // Use Api routes in the App
