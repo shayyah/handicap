@@ -8,7 +8,8 @@ let mongoose = require('mongoose');
 let app = express();
 // Import routes
 let apiRoutes = require("./api_routes")
-
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 // Configure bodyparser to handle post requests
 app.use(bodyParser.urlencoded({
@@ -33,3 +34,68 @@ app.use('/api', apiRoutes)
 app.listen(port, function () {
     console.log("Running blind_support server on port " + port);
 });
+var UserController = require('./controllers/userController')
+io.on('connection', socket => {
+  console.log('User connected');
+  var socketId=socket.id;
+  var myId;
+  socket.emit('connected');
+  socket.on('login', function (data) {
+      UserController.getUser(data.id,function(user){
+            if(user!=null)
+            {
+              myId=user.id;
+              UserController.LoginSocket(user,socketId,function(MyUser){
+                if(MyUser!=null)
+                    socket.emit('logindone',user);
+              });
+            }
+      });
+
+
+  });
+  socket.on('getunreadmessages',function(data){
+      var id=data.id;
+      UserController.getUser(id,function(user){
+          UserController.UnreadMessages(user,function(messages){
+                messages.forEach(message=>{
+                    socket.emit('newmessage',message);
+                });
+          });
+      });
+  });
+  socket.on('sendmessage',function(data){
+      //var resieverId=data.resieverId;
+      var senderId=data.senderId;
+      var sound=data.sound;
+      var date=new Date();
+      UserController.getUser(senderId,function(user){
+          if(user!=null){
+              UserController.CreateNewMessage(user,sound,date,function(message){
+                  if(message!=null)
+                  {
+                    UserController.getAllUsers(function(users){
+                          if(users!=null)
+                          {
+                            users.forEach(other =>{
+                                if(other.online&&other.id!=user.id){
+                                  io.to(other.socketId).emit('newmessage',message);
+                                }
+                            });
+                          }
+                    });
+                  }
+              });
+          }
+
+      });
+  });
+  socket.on('disconnect', () => {
+        UserController.getUser(data.id,function(user){
+            if(user!=null)
+            {
+              UserController.DisconnectSocket(user);
+            }
+        });
+  });
+})

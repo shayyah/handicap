@@ -1,5 +1,6 @@
 var shortid = require('short-id');
 var fs=require('fs');
+
 //var MongoClient = require('mongodb').MongoClient;
 //var db_uri = 'mongodb://127.0.0.1:27017/blind_support_data';
 //var db_params = { useNewUrlParser : true };
@@ -8,6 +9,7 @@ var fs=require('fs');
 //    dbo =db.db('blind_support_data');
 //});
 User = require('../models/userModel.js');
+Message=require('../models/messageModel.js');
 // Import short-id
 var path="/app/sound/";
 // Import fs
@@ -44,12 +46,14 @@ function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rd
     {
       var user=new User();
           user.id=shortid.generate();
+          user.socketId="";
         user.name=rusername;
         user.phone=ruserphone;
         user.password=ruserpassword;
         user.sound="";
         user.datemodified=rdate;
-
+        user.online=false;
+        user.lastOnline=new Date();
     //  console.log(JSON.stringify(User));
       fs.writeFile(path+user.id,rsound,(err)=>{
        if(err)callback(err);
@@ -69,6 +73,19 @@ exports.getUser=function(id,callback) {
       });
 
   }
+exports.getAllUsers=function(callback){
+    User.find({},function(err,res){
+        if(err)callback(null);
+        callback(res);
+    });
+}
+exports.UnreadMessages=function(user,callback){
+      var query={'date':{$gt:user.lastOnline}};
+      Message.find(query,function(err,res){
+          if(err)callback(null);
+          else callback(res);
+      });
+};
 exports.ModifyUserDate=  function(userId,date)
     {
       User.findOne({id:userId},function(err,user){
@@ -83,6 +100,41 @@ exports.ModifyUserDate=  function(userId,date)
       });
 
     }
+//Socket IO messenger
+exports.LoginSocket=function(user,socketId,callback)
+{
+  user.online=true;
+  user.socketId=socketId;
+  user.save(function(err){
+      if(err)callback(null);
+      else callback(user);
+  });
+}
+exports.DisconnectSocket=function(user)
+{
+  user.online=false;
+  user.lastOnline=new Date();
+  user.save(function(err){
+      if(err)console.log('error');
+      else console.log('Disconnected');
+  });
+}
+exports.CreateNewMessage=function(user,mSound,mDate,callback)
+{
+    var message=new Message();
+    message.id=shortid.generate();
+    message.sound=mSound;
+    message.nomeSound=user.sound;
+    message.senderId=user.id;
+    message.date=mDate;
+    message.save(function(err){
+      if(err)callback(null);
+      else {
+        console.log('message created');
+        callback(message);
+      }
+    })
+}
 function GetUserByPhone(Userphone,callback)
     {
       User.findOne({phone:Userphone},function(err,user){

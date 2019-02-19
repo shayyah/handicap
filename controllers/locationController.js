@@ -206,10 +206,10 @@ function GetAllLocations(callback)
                 'latitude':{$gt:minlatitude,$lt:maxlatitude},
                 'approved':false,
                 'deleted':false};
-        console.log(query);
+      //  console.log(query);
         Location.find(query,function(err,result){
           if(err)return callback(null);
-          console.log(result);
+        //  console.log(result);
           callback(result);
         });
 
