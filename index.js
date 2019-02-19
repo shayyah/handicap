@@ -65,6 +65,7 @@ io.on('connection', function (socket){
       var id=data.id;
       UserController.getUser(id,function(user){
           UserController.UnreadMessages(user,function(messages){
+              console.log(JSON.stringify(messages));
                 messages.forEach(message=>{
                     socket.emit('newmessage',message);
                 });

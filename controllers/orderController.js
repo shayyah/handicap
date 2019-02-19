@@ -30,9 +30,9 @@ exports.new = function (req, res) {
     order.blind_id = req.body.blind_id;
     order.volunteer_id = req.body.volunteer_id;
     order.book_id = req.body.book_id;
+    console.log(JSON.stringify(order));
 
-
-    // save the order and check for errors
+    // save the order and check for errorss
     order.save(function (err) {
         if (err)
           res.json(err);

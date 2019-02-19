@@ -139,6 +139,7 @@ function GetAllLocations(callback)
       }
       function CreateLocationAndAddToDataBase(rlongitude,rlatitude,raddress,callback)
       {
+        
   //      console.log(JSON.stringify(UserController));
         var location=new Location();
           location.id=shortid.generate();
@@ -148,10 +149,10 @@ function GetAllLocations(callback)
           location.approved=false;
           location.deleted=false;
           location.datemodified=new Date();
-        console.log(JSON.stringify(location));
-        fs.writeFile(path+location.id,raddress,(err)=>{
-          if(err)callback(null);
-          location.address=path+location.id;
+    //    console.log(JSON.stringify(location));
+    //    fs.writeFile(path+location.id,raddress,(err)=>{
+    //      if(err)callback(null);
+          location.address=raddress;//path+location.id;
           location.save((err)=>{
               if(err)callback(null);
               callback(location);
@@ -161,7 +162,7 @@ function GetAllLocations(callback)
     //          console.log('location inserted   '+JSON.stringify(Location));
     //          callback(Location);
     //        });
-        });
+  //      });
       }
       function GetLocationById(id,callback)
       {

@@ -6,7 +6,7 @@ var orderSchema = mongoose.Schema({
     date : {
       type : Date,
       required : false,
-      default : Date.now
+      default : Date.now()
     },
     order_recording : {
       type : String,
@@ -25,15 +25,15 @@ var orderSchema = mongoose.Schema({
       required : false,
     },
     blind_id : {
-      type : Number,
+      type : String,
       required : true,
     },
     volunteer_id : {
-      type : Number,
+      type : String,
       required : false,
     },
     book_id : {
-      type : Number,
+      type : String,
       required : false,
     }
 });
