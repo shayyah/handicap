@@ -8,7 +8,7 @@ var bookSchema = mongoose.Schema({
       required : true
     },
     book_state : {
-      type : Boolean,
+      type : String,
       required : false
     },
     file_path : {
@@ -16,6 +16,10 @@ var bookSchema = mongoose.Schema({
       required : false
     },
     page_number : {
+      type : Number,
+      required : false
+    },
+    order_number : {
       type : Number,
       required : false
     }
