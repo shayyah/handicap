@@ -26,16 +26,21 @@ mongoose.connect(db_uri, db_params);
 var db = mongoose.connection;
 // Setup server port
 var port = process.env.PORT || 3000;
+
 // Send message for default URL
 app.get('/', (req, res) => res.send('Blind support server is running'));
 // Use Api routes in the App
 app.use('/api', apiRoutes)
 // Launch app to listen to specified port
-app.listen(port, function () {
-    console.log("Running blind_support server on port " + port);
+//app.listen(port, function () {
+//   console.log("Running blind_support server on port " + port);
+//});
+server.listen(port,function(){
+  console.log("Running blind_support server on port " + port);
 });
 var UserController = require('./controllers/userController')
-io.on('connection', socket => {
+
+io.on('connection', function (socket){
   console.log('User connected');
   var socketId=socket.id;
   var myId;
@@ -44,9 +49,11 @@ io.on('connection', socket => {
       UserController.getUser(data.id,function(user){
             if(user!=null)
             {
+            //      console.log(JSON.stringify(user));
               myId=user.id;
               UserController.LoginSocket(user,socketId,function(MyUser){
                 if(MyUser!=null)
+
                     socket.emit('logindone',user);
               });
             }
@@ -66,19 +73,24 @@ io.on('connection', socket => {
   });
   socket.on('sendmessage',function(data){
       //var resieverId=data.resieverId;
+      console.log('messs');
       var senderId=data.senderId;
-      var sound=data.sound;
+      var sound=data.content;
       var date=new Date();
       UserController.getUser(senderId,function(user){
           if(user!=null){
+            console.log(JSON.stringify(user));
               UserController.CreateNewMessage(user,sound,date,function(message){
                   if(message!=null)
                   {
+                    console.log(JSON.stringify(message));
                     UserController.getAllUsers(function(users){
                           if(users!=null)
                           {
+                            console.log(users.length);
                             users.forEach(other =>{
-                                if(other.online&&other.id!=user.id){
+                              //&&other.id!=user.id
+                                if(other.online){
                                   io.to(other.socketId).emit('newmessage',message);
                                 }
                             });
@@ -91,11 +103,12 @@ io.on('connection', socket => {
       });
   });
   socket.on('disconnect', () => {
-        UserController.getUser(data.id,function(user){
+        UserController.getUser(myId,function(user){
             if(user!=null)
             {
+              //    console.log(JSON.stringify(user));
               UserController.DisconnectSocket(user);
             }
         });
   });
-})
+});

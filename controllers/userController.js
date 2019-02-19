@@ -55,14 +55,14 @@ function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rd
         user.online=false;
         user.lastOnline=new Date();
     //  console.log(JSON.stringify(User));
-      fs.writeFile(path+user.id,rsound,(err)=>{
-       if(err)callback(err);
-        user.sound=path+user.id;
+    //  fs.writeFile(path+user.id,rsound,(err)=>{
+  //     if(err)callback(err);
+        user.sound=rsound;//path+user.id;
         user.save(function(err){
           if(err)callback(err);
        console.log('user inserted   '+JSON.stringify(user));
           callback(user);
-      });
+  //    });
      });
     }
 exports.getUser=function(id,callback) {
@@ -124,10 +124,12 @@ exports.CreateNewMessage=function(user,mSound,mDate,callback)
     var message=new Message();
     message.id=shortid.generate();
     message.sound=mSound;
-    message.nomeSound=user.sound;
+    message.nameSound=user.sound;
     message.senderId=user.id;
     message.date=mDate;
+    console.log('mmmm  '+JSON.stringify(message));
     message.save(function(err){
+      console.log(err);
       if(err)callback(null);
       else {
         console.log('message created');
