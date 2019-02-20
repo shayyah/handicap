@@ -14,7 +14,8 @@ var orderController = require('./controllers/orderController');
 // order routes
 router.route('/orders')
     .get(orderController.index)
-    .post(orderController.new);
+    .post(orderController.new)
+    .delete(orderController.erase);
 router.route('/orders/:order_id')
     .get(orderController.view)
     .patch(orderController.update)

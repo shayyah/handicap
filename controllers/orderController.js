@@ -30,7 +30,6 @@ exports.new = function (req, res) {
     order.blind_id = req.body.blind_id;
     order.volunteer_id = req.body.volunteer_id;
     order.book_id = req.body.book_id;
-    console.log(JSON.stringify(order));
 
     // save the order and check for errorss
     order.save(function (err) {
@@ -94,3 +93,15 @@ exports.delete = function (req, res) {
         });
     });
 };
+
+// handle erasing the entire collection
+
+exports.erase = function (req, res) {
+  Order.remove({}, (err) => {
+    if(err) res.send(err);
+    res.json({
+      status: "success",
+      message: 'collection erased'
+    });
+  });
+}
