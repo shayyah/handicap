@@ -37,7 +37,7 @@ app.use('/api', apiRoutes)
 server.listen(port,function(){
   console.log("Running blind_support server on port " + port);
 });
-var UserController = require('./controllers/userController')
+var UserController = require('./controllers/userController');
 
 io.on('connection', function (socket){
   console.log('User connected');
@@ -65,9 +65,7 @@ io.on('connection', function (socket){
       UserController.getUser(id,function(user){
           UserController.UnreadMessages(user,function(messages){
               console.log(JSON.stringify(messages));
-                messages.forEach(message=>{
-                    socket.emit('newmessage',message);
-                });
+              socket.emit('unreadmessages',{messages:messages});
           });
       });
   });
@@ -89,11 +87,12 @@ io.on('connection', function (socket){
                           {
                             console.log(users.length);
                             users.forEach(other =>{
-                              //&&other.id!=user.id
-                                if(other.online){
+                              //
+                                if(other.online&&other.id!=user.id){
                                   io.to(other.socketId).emit('newmessage',message);
                                 }
                             });
+                            socket.emit('confirmsend',{status:'done'});
                           }
                     });
                   }
