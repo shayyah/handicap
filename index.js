@@ -10,7 +10,6 @@ let app = express();
 let apiRoutes = require("./api_routes")
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-
 // Configure bodyparser to handle post requests
 app.use(bodyParser.urlencoded({
     extended: true
