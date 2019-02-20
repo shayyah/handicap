@@ -1,6 +1,6 @@
 // orderModel.js
 var mongoose = require('mongoose');
-
+// update
 // Setup schema
 var orderSchema = mongoose.Schema({
     date : {
@@ -10,31 +10,31 @@ var orderSchema = mongoose.Schema({
     },
     order_recording : {
       type : String,
-      required : false,
+      required : false
     },
     order_state : {
       type : Boolean,
-      required : false,
+      required : false
     },
     last_page_downloaded : {
       type : Number,
-      required : false,
+      required : false
     },
     book_title : {
       type : String,
-      required : false,
+      required : false
     },
     blind_id : {
       type : String,
-      required : true,
+      required : true
     },
     volunteer_id : {
       type : String,
-      required : false,
+      required : false
     },
     book_id : {
       type : String,
-      required : false,
+      required : false
     }
 });
 
