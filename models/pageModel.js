@@ -15,14 +15,18 @@ var pageSchema = mongoose.Schema({
       type : Number,
       required : false
     },
-    book_id : {
-      type : Number,
+    book : {
+      type : Object,
       required : false
     },
     volunteer_id : {
-      type : Number,
+      type : String,
       required : false
     },
+    file_path : {
+      type : String,
+      required : false
+    }
 });
 
 // Export page model
