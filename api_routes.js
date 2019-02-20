@@ -28,11 +28,15 @@ var bookController = require('./controllers/bookController');
 router.route('/books')
     .get(bookController.index)
     .post(bookController.new);
+router.route('/books/content/:book_id')
+    .get(bookController.lastPageRead);
 router.route('/books/:book_id')
     .get(bookController.view)
     .patch(bookController.update)
     .put(bookController.update)
     .delete(bookController.delete);
+router.route('/blind/books/:blind_id')
+    .get(bookController.myBooks);
 
 // Import page controller
 var pageController = require('./controllers/pageController');
@@ -45,6 +49,7 @@ router.route('/pages/:page_id')
       .patch(pageController.update)
       .put(pageController.update)
       .delete(pageController.delete);
+      
   // Import user controller
 var userController=require('./controllers/userController');
 router.route('/user/login')
