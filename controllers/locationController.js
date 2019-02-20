@@ -95,7 +95,7 @@ exports.getnearbylocation=function(req,res){
     longitude:req.query.longitude,
     latitude:req.query.latitude
   };
-  UserController.getUser(UserId,function(MyUser){
+  UserController.getUser(id,function(MyUser){
 //    console.log(JSON.stringify(MyUser));
       if(MyUser!=null)
       {
@@ -139,7 +139,7 @@ function GetAllLocations(callback)
       }
       function CreateLocationAndAddToDataBase(rlongitude,rlatitude,raddress,callback)
       {
-        
+
   //      console.log(JSON.stringify(UserController));
         var location=new Location();
           location.id=shortid.generate();
