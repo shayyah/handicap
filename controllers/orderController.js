@@ -1,7 +1,12 @@
 // orderController.js
 // Import order model
 Order = require('../models/orderModel.js');
-
+// Import book model
+Book = require('../models/bookModel.js');
+// Default path of order recordings
+var Path = 'D://ali-h/blind support/audio/orders/';
+// Import file stream
+const fs = require('fs');
 // Handle index actions
 exports.index = function (req, res) {
     Order.get(function (err, orders) {
