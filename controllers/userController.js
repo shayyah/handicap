@@ -108,7 +108,7 @@ exports.ModifyUserDate=  function(userId,date)
     function sortMessagesByDate(messages,callback)
     {
         var DateMessage={
-          date:new Date();
+          date:new Date(),
           messages:[]
         }
         var AllDateMessages=[];
