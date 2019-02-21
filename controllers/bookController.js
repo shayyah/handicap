@@ -155,8 +155,31 @@ exports.delete = function (req, res) {
 
 // Handle my books requests
 exports.myBooks = function (req, res) {
-  var blind = req.params.book_id;
-  Order.find({'blind_id' : blind, 'order_state' : true}, 'book_id', (err, book_ids) => {
-    console.log(book_ids);
+  var blind = req.params.blind_id;
+  var books = [];
+  Order.find({'blind_id' : blind, 'order_state' : true}, 'book_title', (err, book_titles) => {
+    book_titles.forEach((element)=>{
+      books.push(element.book_title);
+    });
+    Book.find(
+      {
+        'title' : { "$in": books }
+      }, (err, myBooks) => {
+        if (err) {
+            res.json({
+                status: "error",
+                message: err,
+            });
+        }
+        res.json({
+            status: "success",
+            message: "books retrieved successfully",
+            data: myBooks
+        });
+      });
   });
 };
+
+// 5c6d5095618d1d26109484e7
+// 5c6d5094618d1d26109484e6
+// 5c6d5094618d1d26109484e5
