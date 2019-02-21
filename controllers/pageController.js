@@ -37,10 +37,10 @@ exports.new = function (req, res) {
     // handling new bytes stream
     if(req.body.page_recording) {
       page.page_state = true;
-      if (page.page_number === page.book.page_number) {
+      if (page.page_number == page.book.page_number) {
         page.book.book_state = "Completed";
         updateBookState(page.book._id, "Completed");
-      } else if (page.page_number === 1) {
+      } else if (page.page_number == 1) {
         page.book.book_state = "Ongoing";
         updateBookState(page.book._id, "Ongoing");
       }
@@ -48,7 +48,7 @@ exports.new = function (req, res) {
       fs.writeFile(customPath, audioBytes, (err) => {
         if(err) res.send(err);
         page.page_recording = customPath;
-        console.log('Page recording have been updated successfully!!');
+        console.log('Page recording have been added successfully!!');
       });
     }
 
@@ -134,6 +134,27 @@ exports.delete = function (req, res) {
           message: 'page deleted'
         });
     });
+};
+
+// handle book pages
+exports.bookPages = function (req, res) {
+  var skipping = Number(req.query.skipping);
+  if (req.query.skipping < 1) {
+    skipping = 0;
+  }
+  Page.find({'book._id' : req.params.book_id, 'page_state' : true}, null, {skip : skipping}, (err, pages) => {
+    if (err) {
+        res.json({
+            status: "error",
+            message: err,
+        });
+    }
+    res.json({
+        status: "success",
+        message: "book pages retrieved successfully",
+        data: pages
+    });
+  }).sort({page_number : 1}).limit(5);
 };
 
 var updateBookState = function(book_id, book_state) {

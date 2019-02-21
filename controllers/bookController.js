@@ -179,7 +179,3 @@ exports.myBooks = function (req, res) {
       });
   });
 };
-
-// 5c6d5095618d1d26109484e7
-// 5c6d5094618d1d26109484e6
-// 5c6d5094618d1d26109484e5
