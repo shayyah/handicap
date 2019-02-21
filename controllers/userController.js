@@ -83,7 +83,12 @@ exports.UnreadMessages=function(user,callback){
       var query={'date':{$gt:user.lastOnline}};
       Message.find(query,function(err,res){
           if(err)callback(null);
-          else callback(res);
+          else {
+            sortMessagesByDate(res,function(messages){
+                  callback(messages);
+            });
+
+          }
       });
 };
 exports.ModifyUserDate=  function(userId,date)
@@ -98,6 +103,35 @@ exports.ModifyUserDate=  function(userId,date)
             });
           }
       });
+
+    }
+    function sortMessagesByDate(messages,callback)
+    {
+        var DateMessage={
+          date:new Date(),
+          messages:[]
+        }
+        var AllDateMessages=[];
+        for(var i=0;i<messages.length;i++)
+        {
+            if(i!=0)
+            {
+                if(messages[i].date.getYear()!=messages[i-1].date.getYear()||messages[i].date.getMonth()!=messages[i-1].date.getMonth()||
+                        messages[i].date.getDate()==messages[i-1].date.getDate())
+                        {
+                            AllDateMessages.Add(DateMessage);
+                            DateMessage.date=messages[i].date;
+                            DateMessage.messages=[];
+                            DateMessage.messages.Add(messages[i]);
+                        }
+            }
+            else{
+              DateMessage.date=messages[i].date;
+              DateMessage.messages.Add(messages[i]);
+            }
+        }
+        AllDateMessages.Add(DateMessage);
+        callback(AllDateMessages);
 
     }
 //Socket IO messenger

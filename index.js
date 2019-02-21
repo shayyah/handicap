@@ -20,7 +20,9 @@ app.use(bodyParser.json());
 var db_uri = process.env.MONGOLAB_URI ||
     process.env.MONGOHQ_URL ||'mongodb://127.0.0.1:27017/blind_support_data';
 var db_params = { useNewUrlParser : true };
-mongoose.connect(db_uri, db_params);
+mongoose.connect(db_uri, db_params,function(err,res){
+  if(err)console.log(err);
+});
 
 var db = mongoose.connection;
 // Setup server port
@@ -37,7 +39,7 @@ app.use('/api', apiRoutes)
 server.listen(port,function(){
   console.log("Running blind_support server on port " + port);
 });
-var UserController = require('./controllers/userController')
+var UserController = require('./controllers/userController');
 
 io.on('connection', function (socket){
   console.log('User connected');
@@ -65,9 +67,7 @@ io.on('connection', function (socket){
       UserController.getUser(id,function(user){
           UserController.UnreadMessages(user,function(messages){
               console.log(JSON.stringify(messages));
-                messages.forEach(message=>{
-                    socket.emit('newmessage',message);
-                });
+              socket.emit('unreadmessages',{messages:messages});
           });
       });
   });
@@ -89,11 +89,12 @@ io.on('connection', function (socket){
                           {
                             console.log(users.length);
                             users.forEach(other =>{
-                              //&&other.id!=user.id
-                                if(other.online){
+                              //
+                                if(other.online&&other.id!=user.id){
                                   io.to(other.socketId).emit('newmessage',message);
                                 }
                             });
+                            socket.emit('confirmsend',{status:'done'});
                           }
                     });
                   }
