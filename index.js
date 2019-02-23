@@ -19,9 +19,11 @@ app.use(bodyParser.json());
 // Connect to Mongoose and set connection variable
 var db_uri = process.env.MONGOLAB_URI ||
     process.env.MONGOHQ_URL ||'mongodb://127.0.0.1:27017/blind_support_data';
+  console.log(db_uri);
 var db_params = { useNewUrlParser : true };
 mongoose.connect(db_uri, db_params,function(err,res){
   if(err)console.log(err);
+  console.log('connected  ');
 });
 
 var db = mongoose.connection;
