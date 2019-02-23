@@ -44,12 +44,14 @@ var pageController = require('./controllers/pageController');
 router.route('/pages')
       .get(pageController.index)
       .post(pageController.new);
+router.route('/book/pages/:book_id')
+      .get(pageController.bookPages);
 router.route('/pages/:page_id')
       .get(pageController.view)
       .patch(pageController.update)
       .put(pageController.update)
       .delete(pageController.delete);
-      
+
   // Import user controller
 var userController=require('./controllers/userController');
 router.route('/user/login')
