@@ -22,8 +22,8 @@ var db_uri = process.env.MONGOLAB_URI ||
   console.log(db_uri);
 var db_params = { useNewUrlParser : true };
 mongoose.connect(db_uri, db_params,function(err,res){
-  if(err)console.log(err);
-  console.log('connected  ');
+  if(err)console.log('database error  '+err);
+  console.log('connected  '+db_uri);
 });
 
 var db = mongoose.connection;
