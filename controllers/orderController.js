@@ -4,7 +4,8 @@ Order = require('../models/orderModel.js');
 // Import book model
 Book = require('../models/bookModel.js');
 // Default path of order recordings
-var Path = '../audio/orders/';
+
+var Path = process.cwd() + '/audio/orders/';
 // Import file stream
 const fs = require('fs');
 // Handle index actions
@@ -51,21 +52,13 @@ exports.index = function (req, res) {
 exports.new = function (req, res) {
     var order = new Order();
     order.date = new Date();
-    var bytesStream = req.body.order_recording;
+    order.order_recording = req.body.order_recording;
     order.order_state = false;
     order.last_page_downloaded = 0;
     order.book_title = req.body.book_title;
     order.blind_id = req.body.blind_id;
     order.volunteer_id = req.body.volunteer_id;
     order.book_id = req.body.book_id;
-
-    // handling bytes stream
-    customPath = (Path + order._id + '.mp3');
-    order.order_recording = customPath;
-    fs.writeFile(customPath, bytesStream, (err) => {
-      if(err) res.send(err);
-      console.log('Order recoriong have been saved successfully!!');
-    });
 
     // save the order and check for errorss
     order.save(function (err) {
