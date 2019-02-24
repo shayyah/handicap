@@ -4,7 +4,7 @@ Page = require('../models/pageModel.js');
 // Import book model
 Book = require('../models/bookModel.js');
 // default path of pages recordings
-var Path = 'D://ali-h/blind support/audio/pages/';
+var Path = '/app/audio/pages/';
 // Import file stream
 const fs = require('fs');
 // Handle index actions

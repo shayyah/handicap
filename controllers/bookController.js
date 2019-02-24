@@ -6,7 +6,7 @@ Page = require('../models/pageModel.js');
 // Import Order model
 Order = require('../models/orderModel.js');
 // default path of pdf books
-var Path = 'D://ali-h/blind support/documents/books/';
+var Path = '/app/documents/books/';
 // Import file stream
 const fs = require('fs');
 // Handle index actions
