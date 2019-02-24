@@ -4,7 +4,7 @@ Order = require('../models/orderModel.js');
 // Import book model
 Book = require('../models/bookModel.js');
 // Default path of order recordings
-var Path = '/app/audio/orders/';
+var Path = '../audio/orders/';
 // Import file stream
 const fs = require('fs');
 // Handle index actions
