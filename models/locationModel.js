@@ -4,6 +4,10 @@ var locationSchema=mongoose.Schema({
       type:String,
       require:true
   },
+  user_id:{
+    type:String,
+    require:true
+  },
   longitude:{
       type:String,
       require:true

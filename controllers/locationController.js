@@ -46,18 +46,27 @@ exports.getlocations=function(req,res){
         });
 };
 exports.addlocation=function(req,res){
-
+        var id=req.body.id;
         var longitude=parseFloat(req.body.longitude);
         var latitude=parseFloat(req.body.latitude);
         var address=req.body.address;
         console.log(address);
-        CreateLocationAndAddToDataBase(longitude,latitude,address,function(myLocation){
-          if(myLocation!=null)
-          {
-            res.json(myLocation);
+        getUser(id,function(MyUser){
+          if(MyUser.sound_count<20)
+            {
+              CreateLocationAndAddToDataBase(id,longitude,latitude,address,function(myLocation){
+              if(myLocation!=null)
+              {
+                res.json(myLocation);
+                UserController.Updatelocation_count(MyUser,1);
+              }
+              else res.send('error');
+              });
           }
-          else res.send('error');
-        });
+          else {
+            res.send('cant add location');
+          }
+      });
 };
 exports.changestate=function(req,res){
   console.log("puuut");
@@ -82,6 +91,11 @@ exports.changestate=function(req,res){
                 if(location!=null)
                 {
                   res.json(location);
+                  UserController.getUser(location.user_id,function(MyUser){
+                    if(MyUser!=null)
+                      UserController.Updatelocation_count(MyUser,-1);
+                  });
+
                 }
                 else {
                   res.send('error');
@@ -137,12 +151,13 @@ function GetAllLocations(callback)
             else callback(null);
         });
       }
-      function CreateLocationAndAddToDataBase(rlongitude,rlatitude,raddress,callback)
+      function CreateLocationAndAddToDataBase(rid,rlongitude,rlatitude,raddress,callback)
       {
 
   //      console.log(JSON.stringify(UserController));
         var location=new Location();
           location.id=shortid.generate();
+          location.user_id=rid;
           location.longitude=rlongitude;
           location.latitude=rlatitude;
           location.address="";

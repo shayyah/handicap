@@ -65,6 +65,7 @@ function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rd
         user.datemodified=rdate;
         user.online=false;
         user.lastOnline=new Date();
+        user.location_count=0;
     //  console.log(JSON.stringify(User));
     //  fs.writeFile(path+user.id,rsound,(err)=>{
   //     if(err)callback(err);
@@ -116,6 +117,13 @@ exports.ModifyUserDate=  function(userId,date)
       });
 
     }
+  exports.Updatelocation_count= function(user,value)
+  {
+      user.location_count+=value;
+      user.save(function(err){
+        if(err) console.log(err);
+      });
+  }
     function sortMessagesByDate(messages,callback)
     {
         var DateMessage={

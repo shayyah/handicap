@@ -25,6 +25,10 @@ var userSchema=mongoose.Schema({
       type:String,
       required:false
     },
+    location_count:{
+      type:Number,
+      require:false
+    },
     datemodified:{
       type:Date,
       required:false
