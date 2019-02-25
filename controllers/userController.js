@@ -34,13 +34,24 @@ exports.register = function (req, res) {
 //      var token=req.body.token;
       var password=req.body.password;
       var sound=req.body.sound;
-      var dateModified=new Date("2019-01-01T00:00:00.123Z");
+        var dateModified=new Date("2019-01-01T00:00:00.123Z");
+      GetUserByPhone(phone,function(user){
+        if(user==null)
+        {
+            CreateUserAndAddToDataBase(name,phone,password,sound,dateModified,function(myUser){
+            if(myUser!=null)
+              res.json(myUser);
+            else res.send('error');
+          });
+        }
+        else
+        {
+          res.send('error');
+        }
+      })
+
     //  console.log('name   '+ req.body.name);
-      CreateUserAndAddToDataBase(name,phone,password,sound,dateModified,function(myUser){
-        if(myUser!=null)
-          res.json(myUser);
-        else res.send('error');
-      });
+
   }
 function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rdate,callback)
     {
