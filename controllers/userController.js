@@ -46,7 +46,7 @@ exports.register = function (req, res) {
         }
         else
         {
-          res.send('error');
+          res.send('phone already exist');
         }
       })
 
