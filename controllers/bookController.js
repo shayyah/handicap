@@ -6,7 +6,7 @@ Page = require('../models/pageModel.js');
 // Import Order model
 Order = require('../models/orderModel.js');
 // default path of pdf books
-var Path = 'D://ali-h/blind support/documents/books/';
+var Path = '/app/documents/books/';
 // Import file stream
 const fs = require('fs');
 // Handle index actions
@@ -54,20 +54,12 @@ exports.index = function (req, res) {
 // Handle create book actions
 exports.new = function (req, res) {
     var book = new Book();
-    var book_data = req.body.book_data;
+    book.book_data = req.body.book_data;
     book.title = req.body.title ? req.body.title : book.title;
     book.file_path = req.body.file_path;
     book.page_number = req.body.page_number;
     book.book_state = "Beginning";
     book.order_number = 1;
-
-    // handling bytes stream
-    customPath = (Path + book.title + '.pdf');
-    book.file_path = customPath;
-    fs.writeFile(customPath, book_data, (err) => {
-      if(err) res.send(err);
-      console.log('eBook have been saved successfully!!');
-    });
 
     // save the book and check for errors
     book.save(function (err) {

@@ -7,6 +7,10 @@ var bookSchema = mongoose.Schema({
       type : String,
       required : true
     },
+    book_data : {
+      type : String,
+      required : true
+    },
     book_state : {
       type : String,
       required : false
