@@ -276,7 +276,7 @@ function GetAllLocations(callback)
         var query ={'longitude':{$gt:minLongitude,$lt:maxLongitude},
                 'latitude':{$gt:minlatitude,$lt:maxlatitude},
                 'approved':false,
-                'deleted':false};
+                'deleted':false,'isPublic':true};
       //  console.log(query);
         Location.find(query,function(err,result){
           if(err)return callback(null);
