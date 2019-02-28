@@ -91,17 +91,20 @@ exports.getAllUsers=function(callback){
         callback(res);
     });
 }
-exports.UnreadMessages=function(user,callback){
-      var query={'date':{$gt:user.lastOnline}};
+exports.UnreadMessages=function(user,conversationsIds,callback){
+    var messages=[];
+      var query={'date':{$gt:user.lastOnline},'conversation_id':{$in:conversationsIds}};
       Message.find(query,function(err,res){
-          if(err)callback(null);
-          else {
-            sortMessagesByDate(res,function(messages){
-                  callback(messages);
-            });
-
+          if(err){
+              console.log('error find messages');
           }
-      });
+          else {
+              callback(res);
+          }
+        });
+
+
+
 };
 exports.ModifyUserDate=  function(userId,date)
     {
@@ -172,12 +175,14 @@ exports.DisconnectSocket=function(user)
       else console.log('Disconnected');
   });
 }
-exports.CreateNewMessage=function(user,mSound,mDate,callback)
+exports.CreateNewMessage=function(user,conversation_id,text,mSound,mDate,callback)
 {
     var message=new Message();
     message.id=shortid.generate();
+    message.conversation_id=conversation_id;
     message.sound=mSound;
     message.nameSound=user.sound;
+    message.text=text;
     message.senderId=user.id;
     message.date=mDate;
     console.log('mmmm  '+JSON.stringify(message));

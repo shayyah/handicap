@@ -164,13 +164,13 @@ exports.getnearbylocation=function(req,res){
       else res.send('error');
     });
 }
-function GetMyLocations(id,callback){
+function GetMyLocations (id,callback){
   var query ={'user_id':id,'isPublic':false};
   Location.find(query,function(err,res){
       if(err)callback(null)
       callback(res);
   });
-});
+}
 function GetAllLocations(callback)
     {
       Location.find({},function(err,result){

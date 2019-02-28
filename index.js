@@ -41,7 +41,7 @@ server.listen(port,function(){
   console.log("Running blind_support server on port " + port);
 });
 var UserController = require('./controllers/userController');
-
+var ConversationController =require('./controllers/conversationController');
 io.on('connection', function (socket){
   console.log('User connected');
   var socketId=socket.id;
@@ -66,26 +66,58 @@ io.on('connection', function (socket){
   socket.on('getunreadmessages',function(data){
       var id=data.id;
       UserController.getUser(id,function(user){
-          UserController.UnreadMessages(user,function(messages){
-              console.log(JSON.stringify(messages));
-              socket.emit('unreadmessages',{messages:messages});
+          ConversationController.getAllConversations(id,function(conversations){
+            var conversationsIds=[];
+            conversations.forEach(conversation=>{
+              conversationsIds.Add(conversation.id);
+            });
+          UserController.UnreadMessages(user,conversationsIds,function(messages){
+              messages.forEach(message=>{
+                  socket.emit('newmessage',message);
+              })
+
           });
+        });
       });
   });
+  socket.on('getallconversations',function(data){
+      var id=data.id;
+        ConversationController.getAllConversations(id,function(conversations){
+            if(conversations!=null)
+            {
+              socket.emit('allconversations',{'conversations':conversations});
+            }
+        });
+  });
+  socket.on('createConversation',function(data){
+    var creator_id=data.creator_id;
+    var other_id=data.other_id;
+    ConversationController.createConversation(creator_id,other_id,function(conversation){
+        if(conversation!=null)
+        {
+            socket.emit('conversationCreated',conversation);
+        }
+    });
+  });
+
   socket.on('sendmessage',function(data){
       //var resieverId=data.resieverId;
       console.log('messs');
       var senderId=data.senderId;
+      var conversation_id=data.conversation_id;
       var sound=data.content;
+      var text=data.text;
       var date=new Date();
       UserController.getUser(senderId,function(user){
           if(user!=null){
-            console.log(JSON.stringify(user));
-              UserController.CreateNewMessage(user,sound,date,function(message){
+          
+              UserController.CreateNewMessage(user,conversation_id,text,sound,date,function(message){
                   if(message!=null)
                   {
                     console.log(JSON.stringify(message));
-                    UserController.getAllUsers(function(users){
+                    if(conversation_id=='')
+                    {
+                      UserController.getAllUsers(function(users){
                           if(users!=null)
                           {
                             console.log(users.length);
@@ -97,7 +129,27 @@ io.on('connection', function (socket){
                             });
                             socket.emit('confirmsend',{status:'done'});
                           }
-                    });
+                        });
+                    }
+                    else {
+                      Conversation.getConversation(conversation_id,function(conversation){
+                        if(conversation!=null){
+                          if(conversation.creator_id==senderId)
+                          {
+                              UserController.getUser(conversation.other_id,function(other){
+                                if(other!=null)
+                                  io.to(other.socketId).emit('newmessage',message);
+                              });
+                          }
+                          else {
+                            UserController.getUser(conversation.creator_id,function(other){
+                                if(other!=null)
+                                  io.to(other.socketId).emit('newmessage',message);
+                            });
+                          }
+                        }
+                      });
+                    }
                   }
               });
           }

@@ -1,5 +1,5 @@
 var mongoose=require('mongoose');
-var conversationSchema=mongoos.Schema({
+var conversationSchema=mongoose.Schema({
     id:{
 
     },

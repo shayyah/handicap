@@ -9,13 +9,21 @@ var messageSchema=mongoose.Schema({
       type:String,
       required:true
     },
+    conversation_id:{
+      type:String,
+      required:true
+    },
     sound:{
       type:String,
       required:true
     },
+    text:{
+      type:String,
+      required:false
+    },
     nameSound:{
       type:String,
-      required:true
+      required:false
     },
     date:{
       type:Date,
