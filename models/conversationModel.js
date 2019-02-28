@@ -1,19 +1,20 @@
 var mongoose=require('mongoose');
 var conversationSchema=mongoose.Schema({
     id:{
-
+        type:String,
+          required:true
     },
     creator_id:{
         type:String,
-        require:true
+        required:true
     },
     other_id:{
       type:String,
-      require:true
+        required:true
     },
     date_created:{
       type:String,
-      require:false
+      required:false
     }
 });
 var Conversation =module.exports=mongoose.model('Concersation',conversationSchema);

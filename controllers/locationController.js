@@ -36,14 +36,14 @@ exports.getlocations=function(req,res){
 
                                 }
                                 else {
-                                  res.send('error');
+                                  res.json({message:'error'});
                                 }
                             });
                         }
-                        else res.send('error');
+                        else res.json({message:'error'});
                 });
             }
-            else res.send('error');
+            else res.json({message:'error'});
         });
 };
 exports.addlocation=function(req,res){
@@ -63,11 +63,11 @@ exports.addlocation=function(req,res){
                 res.json(myLocation);
                 UserController.Updatelocation_count(MyUser,1);
               }
-              else res.send('error');
+              else res.json({message:'error'});
               });
           }
           else {
-            res.send('cant add location');
+            res.json({message:'cant add location'});
           }
       });
 };
@@ -79,7 +79,7 @@ exports.getmylocations=function(req,res){
             {
               res.json(result);
             }
-            else res.send('error');
+            else res.json({message:'error'});
         });
     });
 };
@@ -98,7 +98,7 @@ exports.addpubliclocation=function(req,res){
               {
                 res.json(myLocation);
               }
-              else res.send('error');
+              else res.json({message:'error'});
               });
 
       });
@@ -109,7 +109,7 @@ exports.deletelocation=function(req,res){
     {
       res.json(location);
     }
-    else res.send(error);
+    else res.json({message:'error'});
   });
 }
 exports.changestate=function(req,res){
@@ -126,7 +126,7 @@ exports.changestate=function(req,res){
                   res.json(location);
                 }
                 else {
-                  res.send('error');
+                  res.json({message:'error'});
                 }
               });
           }
@@ -142,7 +142,7 @@ exports.changestate=function(req,res){
 
                 }
                 else {
-                  res.send('error');
+                  res.json({message:'error'});
                 }
               });
           }
@@ -161,10 +161,10 @@ exports.getnearbylocation=function(req,res){
           GetNearbyUnapprovedLocations(UserLocation,function(locations){
             if(locations!=null)
               res.json({nearbyLocations:locations});
-            else res.send('error');
+            else res.json({message:'error'});
           });
       }
-      else res.send('error');
+      else res.json({message:'error'});
     });
 }
 function GetMyLocations (id,callback){

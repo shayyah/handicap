@@ -20,10 +20,10 @@ exports.login = function (req, res) {
         if(MyUser!=null)
         {
             if(MyUser.password!=password)
-              res.send("wrong password or phone");
+              res.json({message:'wrong password or phone'});
             else res.json(MyUser);
         }
-        else res.send("error");
+        else res.json({message:'error'});
       });
 
 };
@@ -41,12 +41,12 @@ exports.register = function (req, res) {
             CreateUserAndAddToDataBase(name,phone,password,sound,dateModified,function(myUser){
             if(myUser!=null)
               res.json(myUser);
-            else res.send('error');
+            else res.json({message:'error'});
           });
         }
         else
         {
-          res.send('phone already exist');
+          res.json({message:'phone already exist'});
         }
       })
 
