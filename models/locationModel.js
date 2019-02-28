@@ -20,6 +20,10 @@ var locationSchema=mongoose.Schema({
       type:String,
       require:false
   },
+  text:{
+      type:String,
+      require:false
+  },
   approved:{
       type:Boolean,
       require:false

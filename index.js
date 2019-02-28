@@ -110,7 +110,7 @@ io.on('connection', function (socket){
       var date=new Date();
       UserController.getUser(senderId,function(user){
           if(user!=null){
-          
+
               UserController.CreateNewMessage(user,conversation_id,text,sound,date,function(message){
                   if(message!=null)
                   {

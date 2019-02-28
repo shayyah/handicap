@@ -16,6 +16,7 @@ exports.getlocations=function(req,res){
           longitude:req.query.longitude,
           latitude:req.query.latitude
         };
+
         console.log(UserId);
         UserController.getUser(UserId,function(MyUser){
       //    console.log(JSON.stringify(MyUser));
@@ -50,12 +51,13 @@ exports.addlocation=function(req,res){
         var longitude=parseFloat(req.body.longitude);
         var latitude=parseFloat(req.body.latitude);
         var address=req.body.address;
+        var text=req.body.text;
         var ispublic=false;
         console.log(address);
         getUser(id,function(MyUser){
           if(MyUser.sound_count<20)
             {
-              CreateLocationAndAddToDataBase(id,longitude,latitude,address,ispublic,function(myLocation){
+              CreateLocationAndAddToDataBase(id,longitude,latitude,address,text,ispublic,function(myLocation){
               if(myLocation!=null)
               {
                 res.json(myLocation);
@@ -87,10 +89,11 @@ exports.addpubliclocation=function(req,res){
         var latitude=parseFloat(req.body.latitude);
         var address=req.body.address;
         var ispublic=true;
+        var text='';
         console.log(address);
         getUser(req.body.id,function(MyUser){
 
-              CreateLocationAndAddToDataBase(id,longitude,latitude,address,ispublic,function(myLocation){
+              CreateLocationAndAddToDataBase(id,longitude,latitude,address,text,ispublic,function(myLocation){
               if(myLocation!=null)
               {
                 res.json(myLocation);
@@ -200,7 +203,7 @@ function GetAllLocations(callback)
             else callback(null);
         });
       }
-      function CreateLocationAndAddToDataBase(rid,rlongitude,rlatitude,raddress,ispublic,callback)
+      function CreateLocationAndAddToDataBase(rid,rlongitude,rlatitude,raddress,text,ispublic,callback)
       {
 
   //      console.log(JSON.stringify(UserController));
@@ -210,6 +213,7 @@ function GetAllLocations(callback)
           location.longitude=rlongitude;
           location.latitude=rlatitude;
           location.address="";
+          location.text=text;
           location.approved=true;
           location.deleted=false;
           location.isPublic=ispublic;
