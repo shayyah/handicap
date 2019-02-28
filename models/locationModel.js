@@ -28,6 +28,10 @@ var locationSchema=mongoose.Schema({
     type:Boolean,
     require:false
   },
+  isPublic:{
+    type:Boolean,
+    require:false
+  },
   datemodified:{
       type:Date,
       require:false

@@ -64,8 +64,13 @@ router.route('/location')
   .get(locationController.getlocations)
   .post(locationController.addlocation)
   .put(locationController.changestate);
-router.route('/nearbylocation')
-  .get(locationController.getnearbylocation);
+router.route('/admin/location')
+  .get(locationController.getnearbylocation)
+  .put(locationController.deletelocation)
+  .post(locationController.addpubliclocation);
+router.route('/mylocations')
+  .get(locationController.getmylocations);
+
 
 // Export API routes
 module.exports = router;
