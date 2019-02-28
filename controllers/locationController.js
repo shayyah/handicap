@@ -55,7 +55,7 @@ exports.addlocation=function(req,res){
         var ispublic=false;
         console.log(address);
         UserController.getUser(id,function(MyUser){
-          res.json(Myuser);
+
           if(MyUser!=null&&MyUser.sound_count<20)
             {
               CreateLocationAndAddToDataBase(id,longitude,latitude,address,text,ispublic,function(myLocation){
@@ -68,7 +68,8 @@ exports.addlocation=function(req,res){
               });
           }
           else {
-            res.json({message:'cant add location'});
+            res.json(MyUser);
+          //  res.json({message:'cant add location'});
           }
       });
 };
