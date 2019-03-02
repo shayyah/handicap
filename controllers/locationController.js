@@ -75,7 +75,7 @@ exports.addlocation=function(req,res){
 };
 exports.getmylocations=function(req,res){
     var id=req.query.id;
-    getUser(id,function(myPlayer){
+    UserController.getUser(id,function(myPlayer){
         GetMyLocations(id,function(result){
             if(result!=null)
             {
