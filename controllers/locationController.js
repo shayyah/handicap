@@ -79,7 +79,7 @@ exports.getmylocations=function(req,res){
         GetMyLocations(id,function(result){
             if(result!=null)
             {
-              res.json(result);
+              res.json({'myLocations':result});
             }
             else res.json({message:'error'});
         });
