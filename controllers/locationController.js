@@ -93,7 +93,7 @@ exports.addpubliclocation=function(req,res){
         var ispublic=true;
         var text='';
         console.log(address);
-        getUser(req.body.id,function(MyUser){
+        UserController.getUser(req.body.id,function(MyUser){
 
               CreateLocationAndAddToDataBase(id,longitude,latitude,address,text,ispublic,function(myLocation){
               if(myLocation!=null)
