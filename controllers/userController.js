@@ -141,18 +141,18 @@ exports.ModifyUserDate=  function(userId,date)
                 if(messages[i].date.getYear()!=messages[i-1].date.getYear()||messages[i].date.getMonth()!=messages[i-1].date.getMonth()||
                         messages[i].date.getDate()==messages[i-1].date.getDate())
                         {
-                            AllDateMessages.Add(DateMessage);
+                            AllDateMessages.push(DateMessage);
                             DateMessage.date=messages[i].date;
                             DateMessage.messages=[];
-                            DateMessage.messages.Add(messages[i]);
+                            DateMessage.messages.push(messages[i]);
                         }
             }
             else{
               DateMessage.date=messages[i].date;
-              DateMessage.messages.Add(messages[i]);
+              DateMessage.messages.push(messages[i]);
             }
         }
-        AllDateMessages.Add(DateMessage);
+        AllDateMessages.push(DateMessage);
         callback(AllDateMessages);
 
     }

@@ -69,7 +69,7 @@ io.on('connection', function (socket){
           ConversationController.getAllConversations(id,function(conversations){
             var conversationsIds=[];
             conversations.forEach(conversation=>{
-              conversationsIds.Add(conversation.id);
+              conversationsIds.push(conversation.id);
             });
           UserController.UnreadMessages(user,conversationsIds,function(messages){
               messages.forEach(message=>{
