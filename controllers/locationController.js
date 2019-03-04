@@ -69,7 +69,8 @@ exports.addlocation=function(req,res){
           }
           else {
           //  res.json(MyUser);
-            res.json({message:'cant add location'});
+          var x='cant add location'+JSON.stringify(MyUser)
+            res.json({message:x});
           }
       });
 };
