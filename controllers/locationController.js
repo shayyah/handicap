@@ -214,7 +214,7 @@ function GetAllLocations(callback)
           location.user_id=rid;
           location.longitude=rlongitude;
           location.latitude=rlatitude;
-          location.address="";
+      //    location.address="";
           location.text=text;
           location.approved=true;
           location.deleted=false;

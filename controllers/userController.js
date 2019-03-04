@@ -61,7 +61,7 @@ function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rd
         user.name=rusername;
         user.phone=ruserphone;
         user.password=ruserpassword;
-        user.sound="";
+  //      user.sound="";
         user.datemodified=rdate;
         user.online=false;
         user.lastOnline=new Date();
