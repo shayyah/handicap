@@ -17,7 +17,7 @@ var locationSchema=mongoose.Schema({
       require:true
   },
   address:{
-      type:Array,
+      type:String,
       require:false
   },
   text:{
