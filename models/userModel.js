@@ -22,7 +22,7 @@ var userSchema=mongoose.Schema({
       required:true
     },
     sound:{
-      type:Array,
+      type:String,
       required:false
     },
     location_count:{
