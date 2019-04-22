@@ -49,19 +49,19 @@ var ConversationController =require('./controllers/conversationController');
 
 
 io.on( 'connect', function() {
-console.log("connect');
+console.log('connect');
 });
 
 io.on( 'disconnect', function() {
-console.log("disconnect');
+console.log('disconnect');
 });
 
 io.on( 'connect_failed', function() {
-console.log("connect_failed');
+console.log('connect_failed');
 });
 
 io.on( 'error', function() {
-console.log("error');
+console.log('error');
 });
 
 
