@@ -48,19 +48,19 @@ var ConversationController =require('./controllers/conversationController');
 
 
 
-io.on( 'connect', function() {
+io.on( 'connect', function(socket) {
 console.log('connect');
 });
 
-io.on( 'disconnect', function() {
+io.on( 'disconnect', function(socket) {
 console.log('disconnect');
 });
 
-io.on( 'connect_failed', function() {
+io.on( 'connect_failed', function(socket) {
 console.log('connect_failed');
 });
 
-io.on( 'error', function() {
+io.on( 'error', function(socket) {
 console.log('error');
 });
 
