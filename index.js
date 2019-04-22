@@ -42,6 +42,32 @@ server.listen(port,function(){
 });
 var UserController = require('./controllers/userController');
 var ConversationController =require('./controllers/conversationController');
+
+
+
+
+
+
+io.on( 'connect', function() {
+console.log("connect');
+});
+
+io.on( 'disconnect', function() {
+console.log("disconnect');
+});
+
+io.on( 'connect_failed', function() {
+console.log("connect_failed');
+});
+
+io.on( 'error', function() {
+console.log("error');
+});
+
+
+
+
+
 io.on('connection', function (socket){
   console.log('User connected');
   var socketId=socket.id;
