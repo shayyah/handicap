@@ -28,6 +28,7 @@ mongoose.connect(db_uri, db_params,function(err,res){
 var db = mongoose.connection;
 // Setup server port
 var port = process.env.PORT || 3000;
+console.log(port);
 
 // Send message for default URL
 app.get('/', (req, res) => res.send('Blind support server is running'));
