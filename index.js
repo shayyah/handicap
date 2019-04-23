@@ -157,10 +157,11 @@ io.on('connection', function (socket){
                             console.log(users.length);
                             users.forEach(other =>{
                               //
-                                console.log(other.id);
+                                
+                                console.log(other.id+ "  "+ other.online);
+                                console.log(user.id);
                                 if(other.online&&other.id!=user.id){
                                     
-                                    console.log(other.id+" Online");
                                   io.to(other.socketId).emit('newmessage',message);
                                 }
                             });
