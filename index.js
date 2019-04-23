@@ -133,13 +133,23 @@ io.on('connection', function (socket){
       var conversation_id=data.conversation_id;
       var sound=data.content;
       var text=data.text;
+      
+      console.log('senderId: '+senderId);
+      console.log('conversation_id: '+conversation_id);
+      console.log('sound: '+sound);
+      console.log('text: '+text);
+      
+      
       var date=new Date();
       UserController.getUser(senderId,function(user){
           if(user!=null){
 
               UserController.CreateNewMessage(user,conversation_id,text,sound,date,function(message){
+                  
+                  console.log('CreateNewMessage: '+' start');
                   if(message!=null)
                   {
+                      
                     console.log(JSON.stringify(message));
                     if(conversation_id=='')
                     {
