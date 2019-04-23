@@ -162,6 +162,7 @@ io.on('connection', function (socket){
                                 console.log(user.id);
                                 //if(other.online&&other.id!=user.id){
                                     
+                                  io.emit('newmessage',message);
                                   io.to(other.socketId).emit('newmessage',message);
                                 //}
                             });
