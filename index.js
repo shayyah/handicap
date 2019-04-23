@@ -151,41 +151,21 @@ io.on('connection', function (socket){
                   {
                       
                     console.log(JSON.stringify(message));
-                    if(conversation_id=='')
-                    {
-                      UserController.getAllUsers(function(users){
-                          if(users!=null)
-                          {
-                            console.log(users.length);
-                            users.forEach(other =>{
-                              //
-                                if(other.online&&other.id!=user.id){
-                                  io.to(other.socketId).emit('newmessage',message);
-                                }
-                            });
-                            socket.emit('confirmsend',{status:'done'});
-                          }
+                    
+                    UserController.getAllUsers(function(users){
+                      if(users!=null)
+                      {
+                        console.log(users.length);
+                        users.forEach(other =>{
+                          //
+                            if(other.online&&other.id!=user.id){
+                              io.to(other.socketId).emit('newmessage',message);
+                            }
                         });
-                    }
-                    else {
-                      Conversation.getConversation(conversation_id,function(conversation){
-                        if(conversation!=null){
-                          if(conversation.creator_id==senderId)
-                          {
-                              UserController.getUser(conversation.other_id,function(other){
-                                if(other!=null)
-                                  io.to(other.socketId).emit('newmessage',message);
-                              });
-                          }
-                          else {
-                            UserController.getUser(conversation.creator_id,function(other){
-                                if(other!=null)
-                                  io.to(other.socketId).emit('newmessage',message);
-                            });
-                          }
-                        }
-                      });
-                    }
+                        socket.emit('confirmsend',{status:'done'});
+                      }
+                    });
+                   
                   }
               });
           }
