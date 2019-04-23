@@ -145,27 +145,48 @@ io.on('connection', function (socket){
           if(user!=null){
 
               UserController.CreateNewMessage(user,conversation_id,text,sound,date,function(message){
-                  
-                  console.log('CreateNewMessage: '+' start');
+                   
                   if(message!=null)
                   {
-                      
                     console.log(JSON.stringify(message));
-                    
-                    UserController.getAllUsers(function(users){
-                      if(users!=null)
-                      {
-                        console.log(users.length);
-                        users.forEach(other =>{
-                          //
-                            if(other.online&&other.id!=user.id){
-                              io.to(other.socketId).emit('newmessage',message);
-                            }
+                    //if(conversation_id=='')
+                    //{
+                      UserController.getAllUsers(function(users){
+                          if(users!=null)
+                          {
+                            console.log(users.length);
+                            users.forEach(other =>{
+                              //
+                                console.log(other.id);
+                                if(other.online&&other.id!=user.id){
+                                    
+                                    console.log(other.id+" Online");
+                                  io.to(other.socketId).emit('newmessage',message);
+                                }
+                            });
+                            socket.emit('confirmsend',{status:'done'});
+                          }
                         });
-                        socket.emit('confirmsend',{status:'done'});
-                      }
-                    });
-                   
+                    //}
+//                     else {
+//                       Conversation.getConversation(conversation_id,function(conversation){
+//                         if(conversation!=null){
+//                           if(conversation.creator_id==senderId)
+//                           {
+//                               UserController.getUser(conversation.other_id,function(other){
+//                                 if(other!=null)
+//                                   io.to(other.socketId).emit('newmessage',message);
+//                               });
+//                           }
+//                           else {
+//                             UserController.getUser(conversation.creator_id,function(other){
+//                                 if(other!=null)
+//                                   io.to(other.socketId).emit('newmessage',message);
+//                             });
+//                           }
+//                         }
+//                       });
+//                     }
                   }
               });
           }
