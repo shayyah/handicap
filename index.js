@@ -148,6 +148,10 @@ io.on('connection', function (socket){
                    
                   if(message!=null)
                   {
+                      
+                    io.emit('newmessage',message);
+                      
+                      
                     console.log(JSON.stringify(message));
                     //if(conversation_id=='')
                     //{
@@ -160,11 +164,10 @@ io.on('connection', function (socket){
                                 
                                 console.log(other.id+ "  "+ other.online);
                                 console.log(user.id);
-                                //if(other.online&&other.id!=user.id){
+                                if(other.online&&other.id!=user.id){
                                     
-                                  io.emit('newmessage',message);
                                   io.to(other.socketId).emit('newmessage',message);
-                                //}
+                                }
                             });
                             socket.emit('confirmsend',{status:'done'});
                           }
