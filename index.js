@@ -55,11 +55,11 @@ io.on('connection', function (socket){
       UserController.getUser(data.id,function(user){
             if(user!=null)
             {
-            //      console.log(JSON.stringify(user));
+
               myId=user.id;
               UserController.LoginSocket(user,socketId,function(MyUser){
                 if(MyUser!=null)
-
+                        console.log('logiiii  '+JSON.stringify(user));
                     socket.emit('logindone',user);
               });
             }
