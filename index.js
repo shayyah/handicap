@@ -116,7 +116,7 @@ io.on('connection', function (socket){
                   if(message!=null)
                   {
                     console.log(JSON.stringify(message));
-                    if(conversation_id=='')
+                    if(conversation_id=='0')
                     {
                       UserController.getAllUsers(function(users){
                           if(users!=null)
