@@ -15,7 +15,7 @@ var messageSchema=mongoose.Schema({
     },
     sound:{
       type:String,
-      required:true
+      required:false
     },
     text:{
       type:String,

@@ -46,29 +46,6 @@ var ConversationController =require('./controllers/conversationController');
 
 
 
-
-
-
-io.on( 'connect', function(socket) {
-console.log('connect');
-});
-
-io.on( 'disconnect', function(socket) {
-console.log('disconnect');
-});
-
-io.on( 'connect_failed', function(socket) {
-console.log('connect_failed');
-});
-
-io.on( 'error', function(socket) {
-console.log('error');
-});
-
-
-
-
-
 io.on('connection', function (socket){
   console.log('User connected');
   var socketId=socket.id;
@@ -134,65 +111,65 @@ io.on('connection', function (socket){
       var conversation_id=data.conversation_id;
       var sound=data.content;
       var text=data.text;
-      
+
       console.log('senderId: '+senderId);
       console.log('conversation_id: '+conversation_id);
       console.log('sound: '+sound);
       console.log('text: '+text);
-      
-      
+
+
       var date=new Date();
       UserController.getUser(senderId,function(user){
           if(user!=null){
 
               UserController.CreateNewMessage(user,conversation_id,text,sound,date,function(message){
-                   
+
                   if(message!=null)
                   {
-                      
+
                     io.emit('newmessage',message);
-                      
-                      
+
+
                     console.log(JSON.stringify(message));
-                    //if(conversation_id=='')
-                    //{
+                    if(conversation_id=='0')
+                    {
                       UserController.getAllUsers(function(users){
                           if(users!=null)
                           {
                             console.log(users.length);
                             users.forEach(other =>{
                               //
-                                
-                                console.log(other.id+ "  "+ other.online);
-                                console.log(user.id);
+
+                                console.log('other  '+other.id+ '   '+ other.online+'   '+other.socketId);
+                              //  console.log(user.id);
                                 if(other.online&&other.id!=user.id){
-                                    
+
                                   io.to(other.socketId).emit('newmessage',message);
                                 }
                             });
                             socket.emit('confirmsend',{status:'done'});
                           }
                         });
-                    //}
-//                     else {
-//                       Conversation.getConversation(conversation_id,function(conversation){
-//                         if(conversation!=null){
-//                           if(conversation.creator_id==senderId)
-//                           {
-//                               UserController.getUser(conversation.other_id,function(other){
-//                                 if(other!=null)
-//                                   io.to(other.socketId).emit('newmessage',message);
-//                               });
-//                           }
-//                           else {
-//                             UserController.getUser(conversation.creator_id,function(other){
-//                                 if(other!=null)
-//                                   io.to(other.socketId).emit('newmessage',message);
-//                             });
-//                           }
-//                         }
-//                       });
-//                     }
+                    }
+                     else {
+                       Conversation.getConversation(conversation_id,function(conversation){
+                        if(conversation!=null){
+                           if(conversation.creator_id==senderId)
+                           {
+                               UserController.getUser(conversation.other_id,function(other){
+                                 if(other!=null)
+                                   io.to(other.socketId).emit('newmessage',message);
+                               });
+                           }
+                           else {
+                             UserController.getUser(conversation.creator_id,function(other){
+                                 if(other!=null)
+                                   io.to(other.socketId).emit('newmessage',message);
+                             });
+                           }
+                         }
+                       });
+                     }
                   }
               });
           }
