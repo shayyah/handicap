@@ -52,6 +52,7 @@ io.on('connection', function (socket){
   var myId;
   socket.emit('connected');
   socket.on('login', function (data) {
+      console.log('logiiiiin user');
       UserController.getUser(data.id,function(user){
             if(user!=null)
             {
