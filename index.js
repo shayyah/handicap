@@ -128,7 +128,7 @@ io.on('connection', function (socket){
                   if(message!=null)
                   {
 
-                    io.emit('newmessage',message);
+                  //  io.emit('newmessage',message);
 
 
                     console.log(JSON.stringify(message));
