@@ -178,6 +178,7 @@ io.on('connection', function (socket){
       });
   });
   socket.on('disconnect', () => {
+    console.log('disscooonect  '+myId);
         UserController.getUser(myId,function(user){
             if(user!=null)
             {
