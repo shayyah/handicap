@@ -3,6 +3,10 @@
 let router = require('express').Router();
 // Set default API response
 router.get('/', function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+   res.setHeader('Access-Control-Allow-Credentials', true);
     res.json({
         status: 'API is Working',
         message: 'Welcome to the library sub-system of the blind support application',
