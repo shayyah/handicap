@@ -10,6 +10,8 @@ let app = express();
 let apiRoutes = require("./api_routes")
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var cors = require('cors');
+
 // Configure bodyparser to handle post requests
 app.use(bodyParser.urlencoded({
     extended: true
@@ -29,12 +31,12 @@ var db = mongoose.connection;
 // Setup server port
 var port = process.env.PORT || 3000;
 console.log(port);
-
+app.use(cors());
 // Send message for default URL
 app.get('/', (req, res) => res.send('Blind support server is running'));
 // Use Api routes in the App
 app.use('/api', apiRoutes);
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -49,7 +51,7 @@ app.use(function (req, res, next) {
 
  // Pass to next layer of middleware
  next();
-});
+});*/
 // Launch app to listen to specified port
 //app.listen(port, function () {
 //   console.log("Running blind_support server on port " + port);
