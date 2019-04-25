@@ -93,7 +93,7 @@ exports.addpubliclocation=function(req,res){
         var address=req.body.address;
         var ispublic=true;
         console.log('addpublic  '+address);
-        var text='';
+        var text=req.body.text;
         console.log(address);
     //    UserController.getUser(req.body.id,function(MyUser){
 
