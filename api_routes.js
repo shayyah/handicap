@@ -65,7 +65,7 @@ router.route('/location')
   .post(locationController.addlocation)
   .put(locationController.changestate);
 router.route('/admin/location')
-  .get(locationController.getnearbylocation)
+  .get(locationController.getpubliclocations)
   .put(locationController.deletelocation)
   .post(locationController.addpubliclocation);
 router.route('/mylocations')

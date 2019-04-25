@@ -94,7 +94,7 @@ exports.addpubliclocation=function(req,res){
         var ispublic=true;
         var text='';
         console.log(address);
-        UserController.getUser(req.body.id,function(MyUser){
+    //    UserController.getUser(req.body.id,function(MyUser){
 
               CreateLocationAndAddToDataBase(id,longitude,latitude,address,text,ispublic,function(myLocation){
               if(myLocation!=null)
@@ -104,7 +104,7 @@ exports.addpubliclocation=function(req,res){
               else res.json({message:'error'});
               });
 
-      });
+  //    });
 };
 exports.deletelocation=function(req,res){
   DeleteLocation(req.body.id,function(location){
@@ -150,7 +150,22 @@ exports.changestate=function(req,res){
               });
           }
         };
-
+exports.getpubliclocations=function(req,res)
+{
+  //var id=req.query.id;
+//  UserController.getUser(id,function(MyUser){
+//    console.log(JSON.stringify(MyUser));
+  //    if(MyUser!=null)
+  //    {
+          GetAllPublicLocations(function(locations){
+            if(locations!=null)
+              res.json({'publicLocations':locations});
+            else res.json({message:'error'});
+          });
+//      }
+  //    else res.json({message:'error'});
+  //  });
+}
 exports.getnearbylocation=function(req,res){
   var id=req.query.id;
   var UserLocation={
@@ -175,6 +190,13 @@ function GetMyLocations (id,callback){
   Location.find(query,function(err,res){
       if(err)callback(null)
       callback(res);
+  });
+}
+function GetAllPublicLocations(callback){
+  var query={'isPublic':true};
+  Location.find(query,function(err,result){
+    if(err)callback(null);
+    callback(result);
   });
 }
 function GetAllLocations(callback)
