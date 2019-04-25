@@ -17,6 +17,10 @@ exports.getlocations=function(req,res){
           latitude:req.query.latitude
         };
 
+  
+        console.log('get public location');
+  
+  
         console.log(UserId);
         UserController.getUser(UserId,function(MyUser){
       //    console.log(JSON.stringify(MyUser));
