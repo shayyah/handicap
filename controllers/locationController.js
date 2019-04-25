@@ -92,6 +92,7 @@ exports.addpubliclocation=function(req,res){
         var latitude=parseFloat(req.body.latitude);
         var address=req.body.address;
         var ispublic=true;
+        console.log('addpublic  '+address);
         var text='';
         console.log(address);
     //    UserController.getUser(req.body.id,function(MyUser){
