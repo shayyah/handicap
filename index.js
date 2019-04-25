@@ -33,7 +33,13 @@ console.log(port);
 // Send message for default URL
 app.get('/', (req, res) => res.send('Blind support server is running'));
 // Use Api routes in the App
-app.use('/api', apiRoutes)
+app.use('/api', apiRoutes);
+app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'https://almacfufin.herokuapp.com/');
+
+}
 // Launch app to listen to specified port
 //app.listen(port, function () {
 //   console.log("Running blind_support server on port " + port);
