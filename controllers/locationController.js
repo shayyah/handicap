@@ -16,16 +16,18 @@ exports.getlocations=function(req,res){
           longitude:req.query.longitude,
           latitude:req.query.latitude
         };
-
-  
-        console.log('get public location');
-  
   
         console.log(UserId);
         UserController.getUser(UserId,function(MyUser){
-      //    console.log(JSON.stringify(MyUser));
+      
+  
+        console.log('get public location');
+          
             if(MyUser!=null)
             {
+              
+  
+        console.log('get public location 1');
     //          console.log('1');
                     GetLocationByUserLocation(UserLocation,MyUser,function(locations){
           //              console.log(locations.length);
