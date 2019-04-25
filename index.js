@@ -39,7 +39,7 @@ app.use(function (req, res, next) {
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', 'https://almacfufin.herokuapp.com/');
 
-}
+});
 // Launch app to listen to specified port
 //app.listen(port, function () {
 //   console.log("Running blind_support server on port " + port);
