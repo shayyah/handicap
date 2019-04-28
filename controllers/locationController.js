@@ -11,53 +11,53 @@ var UserController =require('../controllers/userController');
 //});
 var path="C:/Users/salim-s/Desktop/blind support/sound/"
 exports.getlocations=function(req,res){
-  
-  
-  GetAllPublicLocations(function(locations){
-            if(locations!=null)
-              res.json({locations:locations,deletedlocations:locations});
-            else res.json({message:'error'});
-          });
-  
-//   var UserId=req.query.id;
-//         var UserLocation={
-//           longitude:req.query.longitude,
-//           latitude:req.query.latitude
-//         };
-  
-//         console.log(UserId);
-//         UserController.getUser(UserId,function(MyUser){
-      
-  
-//         console.log('get public location');
-          
-//             if(MyUser!=null)
-//             {
-              
-  
-//                     GetLocationByUserLocation(UserLocation,MyUser,function(locations){
-                      
-//                       console.log('locations' + locations.length); 
-//                         if(locations!=null)
-//                         {
-//                             GetDeletedLocationsByDateModified(UserLocation,MyUser,function(deletedlocations){
-                       
-//                                 if(deletedlocations!=null)
-//                                 {
-//                                     UserController.ModifyUserDate(MyUser.id,new Date());
-//                                     res.json({locations:locations,deletedlocations:deletedlocations});
 
-//                                 }
-//                                 else {
-//                                   res.json({message:'error'});
-//                                 }
-//                             });
-//                         }
-//                         else res.json({message:'error'});
-//                 });
-//             }
-//             else res.json({message:'error'});
-//         });
+
+//  GetAllPublicLocations(function(locations){
+//            if(locations!=null)
+//              res.json({locations:locations,deletedlocations:locations});
+//            else res.json({message:'error'});
+//          });
+
+   var UserId=req.query.id;
+         var UserLocation={
+           longitude:req.query.longitude,
+           latitude:req.query.latitude
+         };
+
+         console.log(UserId);
+         UserController.getUser(UserId,function(MyUser){
+
+
+         console.log('get public location');
+
+             if(MyUser!=null)
+             {
+
+
+                     GetLocationByUserLocation(UserLocation,MyUser,function(locations){
+
+                       console.log('locations' + locations.length);
+                         if(locations!=null)
+                         {
+                             GetDeletedLocationsByDateModified(UserLocation,MyUser,function(deletedlocations){
+
+                                 if(deletedlocations!=null)
+                                 {
+                                     UserController.ModifyUserDate(MyUser.id,new Date());
+                                     res.json({locations:locations,deletedlocations:deletedlocations});
+
+                                }
+                                 else {
+                                   res.json({message:'error'});
+                                 }
+                             });
+                         }
+                         else res.json({message:'error'});
+                });
+             }
+             else res.json({message:'error'});
+         });
 };
 exports.addlocation=function(req,res){
         var id=req.body.id;
