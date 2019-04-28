@@ -34,12 +34,15 @@ console.log(port);
 app.use(cors());
 // Send message for default URL
 app.get('/', function(req, res) {
+  res.send('Server Working on port '+port);
+
+});
+app.get('/locations', function(req, res) {
   fs.readFile('locations.html',function (err, data){
        res.writeHead(200, {'Content-Type': 'text/html','Content-Length':data.length});
        res.write(data);
        res.end();
    });
-
 });
 // Use Api routes in the App
 app.use('/api', apiRoutes);
