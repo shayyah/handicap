@@ -7,7 +7,8 @@ let mongoose = require('mongoose');
 // Initialize the app
 let app = express();
 // Import routes
-let apiRoutes = require("./api_routes")
+let apiRoutes = require("./api_routes");
+var path = require('path');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var cors = require('cors');
@@ -17,7 +18,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-
+app.use(express.static(path.join(__dirname, '/Content')));
 // Connect to Mongoose and set connection variable
 var db_uri = process.env.MONGODB_URI || process.env.MONGOHQ_URL ||'mongodb://127.0.0.1:27017/blind_support_data';
 //  console.log(db_uri);
