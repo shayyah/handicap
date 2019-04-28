@@ -40,7 +40,7 @@ exports.getlocations=function(req,res){
                        console.log('locations' + locations.length);
                          if(locations!=null)
                          {
-                             GetDeletedLocationsByDateModified(UserLocation,MyUser,function(deletedlocations){
+                             GetDeletedLocations(UserLocation,MyUser,function(deletedlocations){
 
                                  if(deletedlocations!=null)
                                  {
@@ -287,12 +287,12 @@ function GetAllLocations(callback)
       }
       function GetLocationByUserLocation(myLocation,user,callback)
       {
-        var minLongitude=parseFloat(myLocation.longitude-0.1);
-        var maxLongitude=parseFloat(myLocation.longitude)+0.1;
-        var minlatitude=parseFloat(myLocation.latitude-0.1);
-        var maxlatitude=parseFloat(myLocation.latitude)+0.1;
+        var minLongitude=parseFloat(myLocation.longitude-0.2);
+        var maxLongitude=parseFloat(myLocation.longitude)+0.2;
+        var minlatitude=parseFloat(myLocation.latitude-0.2);
+        var maxlatitude=parseFloat(myLocation.latitude)+0.2;
         var query ={'longitude':{$gt:minLongitude,$lt:maxLongitude},
-                'latitude':{$gt:minlatitude,$lt:maxlatitude},'datemodified':{$gt:user.datemodified},'deleted':false,'isPublic':true};
+                'latitude':{$gt:minlatitude,$lt:maxlatitude},'deleted':false,'isPublic':true};
         console.log(query);
         Location.find(query,function(err,result){
           if(err)return callback(null);
@@ -329,14 +329,14 @@ function GetAllLocations(callback)
 //            callback(result);
 //        });
       }
-      function GetDeletedLocationsByDateModified(myLocation,user,callback)
+      function GetDeletedLocations(myLocation,user,callback)
       {
-        var minLongitude=parseFloat(myLocation.longitude-0.1);
-        var maxLongitude=parseFloat(myLocation.longitude)+0.1;
-        var minlatitude=parseFloat(myLocation.latitude-0.1);
-        var maxlatitude=parseFloat(myLocation.latitude)+0.1;
+        var minLongitude=parseFloat(myLocation.longitude-0.2);
+        var maxLongitude=parseFloat(myLocation.longitude)+0.2;
+        var minlatitude=parseFloat(myLocation.latitude-0.2);
+        var maxlatitude=parseFloat(myLocation.latitude)+0.2;
         var query ={'longitude':{$gt:minLongitude,$lt:maxLongitude},
-                'latitude':{$gt:minlatitude,$lt:maxlatitude},'datemodified':{$gt:user.datemodified},'deleted':true,'isPublic':true};
+                'latitude':{$gt:minlatitude,$lt:maxlatitude},'deleted':true,'isPublic':true};
         Location.find(query,function(err,result){
           if(err)callback(null);
           callback(result);
