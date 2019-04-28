@@ -11,7 +11,7 @@ let apiRoutes = require("./api_routes")
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var cors = require('cors');
-
+ var fs=require('fs');
 // Configure bodyparser to handle post requests
 app.use(bodyParser.urlencoded({
     extended: true
@@ -33,7 +33,14 @@ var port = process.env.PORT || 3000;
 console.log(port);
 app.use(cors());
 // Send message for default URL
-app.get('/', (req, res) => res.send('Blind support server is running'));
+app.get('/', function(req, res) {
+  fs.readFile('locations.html',function (err, data){
+       res.writeHead(200, {'Content-Type': 'text/html','Content-Length':data.length});
+       res.write(data);
+       res.end();
+   });
+
+});
 // Use Api routes in the App
 app.use('/api', apiRoutes);
 /*app.use(function (req, res, next) {
