@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-app.use(serveStatic('static', {'locations': ['locations.html']}));
+app.use(serveStatic('locations', {'locations': ['locations.html']}));
 //app.use(express.static(path.join(__dirname, './Content')));
 // Connect to Mongoose and set connection variable
 var db_uri = process.env.MONGODB_URI || process.env.MONGOHQ_URL ||'mongodb://127.0.0.1:27017/blind_support_data';
@@ -41,7 +41,7 @@ app.get('/', function(req, res) {
 
 });
 app.get('/locations', function(req, res) {
-  fs.readFile('locations.html',function (err, data){
+  fs.readFile('locations/locations.html',function (err, data){
        res.writeHead(200, {'Content-Type': 'text/html','Content-Length':data.length});
        res.write(data);
        res.end();
