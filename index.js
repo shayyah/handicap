@@ -109,7 +109,7 @@ io.on('connection', function (socket){
 
             conversations.forEach(conversation=>{
               UserController.UnreadMessages(user,conversation.id,function(messages){
-                //  console.log('messages   '+JSON.stringify(messages));
+                  console.log('messages   '+JSON.stringify(messages));
                   messages.forEach(message=>{
                       socket.emit('newmessage',message);
                   });
@@ -117,7 +117,7 @@ io.on('connection', function (socket){
               });
             });
             UserController.UnreadMessages(user,'0',function(messages){
-              //  console.log('messages   '+JSON.stringify(messages));
+                console.log('messages   '+JSON.stringify(messages));
                 messages.forEach(message=>{
                     socket.emit('newmessage',message);
                 });
