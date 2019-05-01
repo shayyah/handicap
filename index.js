@@ -105,19 +105,26 @@ io.on('connection', function (socket){
       UserController.getUser(id,function(user){
           ConversationController.getAllConversations(id,function(conversations){
               console.log('conversations   '+JSON.stringify(conversations));
-            var conversationsIds=[];
-            conversations.forEach(conversation=>{
-              conversationsIds.push(conversation.id);
-            });
-            conversations.push('0');
-              console.log('conversations   '+JSON.stringify(conversations));
-          UserController.UnreadMessages(user,conversationsIds,function(messages){
-              console.log('messages   '+JSON.stringify(messages));
-              messages.forEach(message=>{
-                  socket.emit('newmessage',message);
-              })
+                console.log('conversations   '+JSON.stringify(conversations));
 
-          });
+            conversations.forEach(conversation=>{
+              UserController.UnreadMessages(user,conversation.id,function(messages){
+                //  console.log('messages   '+JSON.stringify(messages));
+                  messages.forEach(message=>{
+                      socket.emit('newmessage',message);
+                  });
+
+              });
+            });
+            UserController.UnreadMessages(user,'0',function(messages){
+              //  console.log('messages   '+JSON.stringify(messages));
+                messages.forEach(message=>{
+                    socket.emit('newmessage',message);
+                });
+
+            });
+
+
         });
       });
   });
@@ -176,11 +183,11 @@ io.on('connection', function (socket){
                       UserController.getAllUsers(function(users){
                           if(users!=null)
                           {
-                            console.log(users.length);
+              //              console.log(users.length);
                             users.forEach(other =>{
                               //
 
-                                console.log('other  '+other.id+ '   '+ other.online+'   '+other.socketId);
+                    //            console.log('other  '+other.id+ '   '+ other.online+'   '+other.socketId);
                               //  console.log(user.id);
                                 if(other.online&&other.id!=user.id){
 

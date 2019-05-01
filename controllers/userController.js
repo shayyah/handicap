@@ -91,10 +91,10 @@ exports.getAllUsers=function(callback){
         callback(res);
     });
 }
-exports.UnreadMessages=function(user,conversationsIds,callback){
+exports.UnreadMessages=function(user,conversationsId,callback){
     var messages=[];
     //{$in:conversationsIds}
-      var query={'date':{$gt:user.lastOnline},'conversation_id':'0'};
+      var query={'date':{$gt:user.lastOnline},'conversation_id':conversationsId};
       Message.find(query,function(err,res){
           if(err){
               console.log('error find messages');
