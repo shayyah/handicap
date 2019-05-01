@@ -109,6 +109,8 @@ io.on('connection', function (socket){
             conversations.forEach(conversation=>{
               conversationsIds.push(conversation.id);
             });
+            conversations.push('0');
+              console.log('conversations   '+JSON.stringify(conversations));
           UserController.UnreadMessages(user,conversationsIds,function(messages){
               console.log('messages   '+JSON.stringify(messages));
               messages.forEach(message=>{

@@ -57,7 +57,7 @@ function findConversation(creator_id,other_id,callback){
   });
 }
 exports.getAllConversations= function(userId,callback){
-  var query={$or:[{'creator_id':userId},{'other_id':userId},{'id':'0'}]};
+  var query={$or:[{'creator_id':userId},{'other_id':userId}]};
   Conversation.find(query,function(err,res){
     if(err)callback(null);
     else callback(res);
