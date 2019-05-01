@@ -159,12 +159,12 @@ io.on('connection', function (socket){
       var conversation_id=data.conversation_id;
       var sound=data.content;
       var text=data.text;
-
+      var local_id=data.local_id;
       console.log('senderId: '+senderId);
       console.log('conversation_id: '+conversation_id);
       console.log('sound: '+sound);
       console.log('text: '+text);
-
+      console.log('local_id  '+local_id  );
 
       var date=new Date();
       UserController.getUser(senderId,function(user){
@@ -195,7 +195,7 @@ io.on('connection', function (socket){
                                   io.to(other.socketId).emit('newmessage',message);
                                 }
                             });
-                            socket.emit('confirmsend',{status:'done'});
+                            socket.emit('confirmsend',{status:'done',local_id:local_id});
                           }
                         });
                     }
@@ -206,13 +206,21 @@ io.on('connection', function (socket){
                            {
                                UserController.getUser(conversation.other_id,function(other){
                                  if(other!=null)
-                                   io.to(other.socketId).emit('newmessage',message);
+                                  {
+                                    if(other.online)
+                                        io.to(other.socketId).emit('newmessage',message);
+                                    socket.emit('confirmsend',{status:'done',local_id:local_id});
+                                   }
                                });
                            }
                            else {
                              UserController.getUser(conversation.creator_id,function(other){
                                  if(other!=null)
-                                   io.to(other.socketId).emit('newmessage',message);
+                                  {
+                                    if(other.online)
+                                        io.to(other.socketId).emit('newmessage',message);
+                                   socket.emit('confirmsend',{status:'done',local_id:local_id});
+                                 }
                              });
                            }
                          }
