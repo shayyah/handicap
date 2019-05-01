@@ -119,6 +119,7 @@ io.on('connection', function (socket){
             UserController.UnreadMessages(user,'0',function(messages){
                 console.log('messages   '+JSON.stringify(messages));
                 messages.forEach(message=>{
+                  if(message.senderId!=user.id)
                     socket.emit('newmessage',message);
                 });
 
