@@ -104,13 +104,13 @@ io.on('connection', function (socket){
       console.log('getunreadmessages');
       UserController.getUser(id,function(user){
           ConversationController.getAllConversations(id,function(conversations){
-              console.log('conversations   '+conversations);
+              console.log('conversations   '+json.stringify(conversations));
             var conversationsIds=[];
             conversations.forEach(conversation=>{
               conversationsIds.push(conversation.id);
             });
           UserController.UnreadMessages(user,conversationsIds,function(messages){
-              console.log('messages   '+messages);
+              console.log('messages   '+json.stringify(messages));
               messages.forEach(message=>{
                   socket.emit('newmessage',message);
               })
