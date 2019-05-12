@@ -53,6 +53,24 @@ exports.register = function (req, res) {
     //  console.log('name   '+ req.body.name);
 
   }
+  exports.settoken=function(req,res){
+      var id=req.body.id;
+      var token=req.body.firebaseId;
+      getUser(id,function(user){
+        if(user!=null)
+        {
+            setFirebaseToken(user,token,function(newUser) {
+                if(newUser==null)
+                    res.json({message:'error'});
+                else res.json(newUser);
+            });
+        }
+        else {
+            res.json({message:'error'});
+        }
+      });
+
+  }
 function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rdate,callback)
     {
       var user=new User();
@@ -66,6 +84,7 @@ function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rd
         user.online=false;
         user.lastOnline=new Date();
         user.location_count=0;
+        user.firebaseId='';
     //  console.log(JSON.stringify(User));
     //  fs.writeFile(path+user.id,rsound,(err)=>{
   //     if(err)callback(err);
@@ -77,6 +96,14 @@ function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rd
   //    });
      });
     }
+  function setFirebaseToken(user,firebaseToken,callback)
+  {
+      user.firebaseId=firebaseToken;
+      user.save(function(err){
+        if(err)callback(err);
+        callback(user);
+      });
+  }
 exports.getUser=function(id,callback) {
   console.log('getUser');
       User.findOne({id:id},function(err,user){

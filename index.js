@@ -14,6 +14,10 @@ var serveStatic = require('serve-static');  // serve static files
 var io = require('socket.io')(server);
 var cors = require('cors');
  var fs=require('fs');
+ var admin = require("firebase-admin");
+
+
+
 // Configure bodyparser to handle post requests
 app.use(bodyParser.urlencoded({
     extended: true
@@ -35,6 +39,13 @@ var db = mongoose.connection;
 var port = process.env.PORT || 3000;
 console.log(port);
 app.use(cors());
+
+var serviceAccount = require("./serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://handicap-cfcb0.firebaseio.com"
+});
 // Send message for default URL
 app.get('/', function(req, res) {
   res.send('Server Working on port '+port);
@@ -171,7 +182,7 @@ io.on('connection', function (socket){
           if(user!=null){
 
               UserController.CreateNewMessage(user,conversation_id,text,sound,date,function(message){
-
+                  socket.emit('confirmsend',{status:'done',local_id:local_id});
                   if(message!=null)
                   {
 
@@ -195,7 +206,7 @@ io.on('connection', function (socket){
                                   io.to(other.socketId).emit('newmessage',message);
                                 }
                             });
-                            socket.emit('confirmsend',{status:'done',local_id:local_id});
+
                           }
                         });
                     }
@@ -209,7 +220,7 @@ io.on('connection', function (socket){
                                   {
                                     if(other.online)
                                         io.to(other.socketId).emit('newmessage',message);
-                                    socket.emit('confirmsend',{status:'done',local_id:local_id});
+                              //      socket.emit('confirmsend',{status:'done',local_id:local_id});
                                    }
                                });
                            }
@@ -219,7 +230,7 @@ io.on('connection', function (socket){
                                   {
                                     if(other.online)
                                         io.to(other.socketId).emit('newmessage',message);
-                                   socket.emit('confirmsend',{status:'done',local_id:local_id});
+                              //     socket.emit('confirmsend',{status:'done',local_id:local_id});
                                  }
                              });
                            }

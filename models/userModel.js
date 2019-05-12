@@ -37,6 +37,10 @@ var userSchema=mongoose.Schema({
       type:Boolean,
       required:false
     },
+    firebaseId:{
+      type:String,
+      required:false
+    },
     lastOnline:{
       type:Date,
       required:false

@@ -63,7 +63,8 @@ router.route('/user/login')
   .get(userController.login);
 router.route('/user/register')
   .post(userController.register);
-
+router.route('/user/token')
+  .post(userController.settoken);
 var locationController=require('./controllers/locationController');
 router.route('/location')
   .get(locationController.getlocations)
