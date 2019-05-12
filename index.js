@@ -205,6 +205,10 @@ io.on('connection', function (socket){
 
                                   io.to(other.socketId).emit('newmessage',message);
                                 }
+                                else if(!other.online&&other.id!=user.id)
+                                {
+                                    sendnotification(conversation_id,user,other);
+                                }
                             });
 
                           }
@@ -220,6 +224,9 @@ io.on('connection', function (socket){
                                   {
                                     if(other.online)
                                         io.to(other.socketId).emit('newmessage',message);
+                                    else {
+                                        sendnotification(conversation_id,user,other);
+                                    }
                               //      socket.emit('confirmsend',{status:'done',local_id:local_id});
                                    }
                                });
@@ -230,6 +237,7 @@ io.on('connection', function (socket){
                                   {
                                     if(other.online)
                                         io.to(other.socketId).emit('newmessage',message);
+                                    else   sendnotification(conversation_id,user,other);
                               //     socket.emit('confirmsend',{status:'done',local_id:local_id});
                                  }
                              });
@@ -243,6 +251,31 @@ io.on('connection', function (socket){
 
       });
   });
+  function sendnotification(conversation_Id,sender,destanation)
+  {
+    var notification = {
+      notification: {
+        title: "وصلتك رسالة جديدة",
+        body: ""
+      },
+      data: {
+        senderId:sender.id,
+        conversationId:conversation_Id,
+        senderName:sender.name
+      }
+    };
+    var options = {
+      priority: "high"
+    };
+    var token=destanation.firebaseId;
+    admin.messaging().sendToDevice(token, notification, options)
+      .then(function(response) {
+        console.log("Successfully sent message:", response);
+      })
+      .catch(function(error) {
+        console.log("Error sending message:", error);
+      });
+  }
   socket.on('disconnect', () => {
     console.log('disscooonect  '+myId);
         UserController.getUser(myId,function(user){
