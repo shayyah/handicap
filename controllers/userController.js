@@ -54,6 +54,7 @@ exports.register = function (req, res) {
 
   }
   exports.settoken=function(req,res){
+    console.log('settoken');
       var id=req.body.id;
       var token=req.body.firebaseId;
       getUser(id,function(user){
