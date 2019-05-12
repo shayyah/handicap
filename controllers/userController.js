@@ -57,7 +57,7 @@ exports.register = function (req, res) {
     console.log('settoken');
       var id=req.body.id;
       var token=req.body.firebaseId;
-      getUser(id,function(user){
+      GetUser(id,function(user){
         if(user!=null)
         {
             setFirebaseToken(user,token,function(newUser) {
@@ -104,6 +104,13 @@ function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rd
         if(err)callback(err);
         callback(user);
       });
+  }
+  function GetUser(id,callback){
+    User.findOne({id:id},function(err,user){
+        if(err)callback(null);
+        callback(user);
+    });
+
   }
 exports.getUser=function(id,callback) {
   console.log('getUser');
