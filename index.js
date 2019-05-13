@@ -207,7 +207,8 @@ io.on('connection', function (socket){
                                 }
                                 else if(!other.online&&other.id!=user.id)
                                 {
-                                  if(other.firebase!=null&&other.firebaseId!='')
+                                  console.log(other.id+'   '+other.firebaseId);
+                                  if(other.firebaseId!=null&&other.firebaseId!='')
                                       sendnotification(conversation_id,user,other);
                                 }
                             });
@@ -226,7 +227,7 @@ io.on('connection', function (socket){
                                     if(other.online)
                                         io.to(other.socketId).emit('newmessage',message);
                                     else {
-                                      if(other.firebase!=null&&other.firebaseId!='')
+                                      if(other.firebaseId!=null&&other.firebaseId!='')
                                         sendnotification(conversation_id,user,other);
                                     }
                               //      socket.emit('confirmsend',{status:'done',local_id:local_id});
@@ -240,7 +241,7 @@ io.on('connection', function (socket){
                                     if(other.online)
                                         io.to(other.socketId).emit('newmessage',message);
                                     else{
-                                      if(other.firebase!=null&&other.firebaseId!='')
+                                      if(other.firebaseId!=null&&other.firebaseId!='')
                                          sendnotification(conversation_id,user,other);
                                        }
                               //     socket.emit('confirmsend',{status:'done',local_id:local_id});
