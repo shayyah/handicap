@@ -62,7 +62,7 @@ exports.register = function (req, res) {
         if(user!=null)
         {
             setFirebaseToken(user,token,function(newUser) {
-              console.log(json.stringify(newUser));
+              console.log(JSON.stringify(newUser));
                 if(newUser==null)
                     res.json({message:'error'});
                 else res.json(newUser);
