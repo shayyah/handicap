@@ -253,6 +253,7 @@ io.on('connection', function (socket){
   });
   function sendnotification(conversation_Id,sender,destanation)
   {
+    console.log('send notification');
     var notification = {
       notification: {
         title: "وصلتك رسالة جديدة",
