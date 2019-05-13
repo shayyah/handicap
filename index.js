@@ -263,7 +263,8 @@ io.on('connection', function (socket){
     var notification = {
       notification: {
         title: "وصلتك رسالة جديدة",
-        body: ""
+        body: "",
+        click_action: "openapp"
       },
       data: {
         senderId:sender.id,
