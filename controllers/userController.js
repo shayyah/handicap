@@ -57,10 +57,12 @@ exports.register = function (req, res) {
     console.log('settoken');
       var id=req.body.id;
       var token=req.body.firebaseId;
+      console.log(id+'    '+token);
       GetUser(id,function(user){
         if(user!=null)
         {
             setFirebaseToken(user,token,function(newUser) {
+              console.log(json.stringify(newUser));
                 if(newUser==null)
                     res.json({message:'error'});
                 else res.json(newUser);
