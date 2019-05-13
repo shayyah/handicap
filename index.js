@@ -264,7 +264,8 @@ io.on('connection', function (socket){
       notification: {
         title: "وصلتك رسالة جديدة",
         body: "",
-        click_action: "openapp"
+        click_action: "openapp",
+        sound:"sound"
       },
       data: {
         senderId:sender.id,
