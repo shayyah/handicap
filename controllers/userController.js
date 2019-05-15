@@ -88,6 +88,7 @@ function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rd
         user.lastOnline=new Date();
         user.location_count=0;
         user.firebaseId='';
+        user.unreadMessages=0;
     //  console.log(JSON.stringify(User));
     //  fs.writeFile(path+user.id,rsound,(err)=>{
   //     if(err)callback(err);
@@ -194,11 +195,20 @@ exports.ModifyUserDate=  function(userId,date)
         callback(AllDateMessages);
 
     }
+  exports.addunreadMessage=function(user,callback)
+  {
+    user.unreadMessages++;
+    user.save(function(err){
+        if(err)callback(null)
+        callback(user);
+    });
+  }
 //Socket IO messenger
 exports.LoginSocket=function(user,socketId,callback)
 {
   user.online=true;
   user.socketId=socketId;
+  user.unreadMessages=0;
   user.save(function(err){
       if(err)callback(null);
       else callback(user);

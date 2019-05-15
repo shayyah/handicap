@@ -41,6 +41,10 @@ var userSchema=mongoose.Schema({
       type:String,
       required:false
     },
+    unreadMessages:{
+      type:Integer,
+      required:false
+    },
     lastOnline:{
       type:Date,
       required:false

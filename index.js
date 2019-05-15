@@ -208,9 +208,13 @@ io.on('connection', function (socket){
                                 else if(!other.online&&other.id!=user.id)
                                 {
                                   console.log(other.id+'   '+other.firebaseId);
+                                  UserController.addunreadMessage(other,function(newother){
                                   if(other.firebaseId!=null&&other.firebaseId!='')
-                                      sendnotification(conversation_id,user,other);
+                                      sendnotification(conversation_id,user,other,newother.unreadMessages);
+
+                                    });
                                 }
+
                             });
 
                           }
@@ -227,8 +231,11 @@ io.on('connection', function (socket){
                                     if(other.online)
                                         io.to(other.socketId).emit('newmessage',message);
                                     else {
+                                        UserController.addunreadMessage(other,function(newother){
                                       if(other.firebaseId!=null&&other.firebaseId!='')
-                                        sendnotification(conversation_id,user,other);
+                                        sendnotification(conversation_id,user,other,newother.UnreadMessages);
+
+                                      });
                                     }
                               //      socket.emit('confirmsend',{status:'done',local_id:local_id});
                                    }
@@ -241,8 +248,10 @@ io.on('connection', function (socket){
                                     if(other.online)
                                         io.to(other.socketId).emit('newmessage',message);
                                     else{
+                                        UserController.addunreadMessage(other,function(newother){
                                       if(other.firebaseId!=null&&other.firebaseId!='')
-                                         sendnotification(conversation_id,user,other);
+                                         sendnotification(conversation_id,user,other,newother.UnreadMessages);
+                                       });
                                        }
                               //     socket.emit('confirmsend',{status:'done',local_id:local_id});
                                  }
@@ -257,12 +266,13 @@ io.on('connection', function (socket){
 
       });
   });
-  function sendnotification(conversation_Id,sender,destanation)
+  function sendnotification(conversation_Id,sender,destanation,totmessages)
   {
     console.log('send notification');
+    var mes= " وصلتك"+totmessages+ " رسالة جديدة ";
     var notification = {
       notification: {
-        title: "وصلتك رسالة جديدة",
+        title: mes,
         body: "",
         click_action: "openapp",
         sound:"sound",
