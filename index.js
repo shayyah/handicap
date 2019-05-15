@@ -279,7 +279,7 @@ io.on('connection', function (socket){
   function sendnotification(conversation_Id,sender,destanation,totmessages)
   {
     console.log('send notification');
-    var mes= " وصلتك"+totmessages+ " رسالة جديدة ";
+    var mes= " وصلتك "+totmessages+ " رسالة جديدة ";
     var notification = {
       notification: {
         title: mes,
