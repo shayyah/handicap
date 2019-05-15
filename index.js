@@ -287,7 +287,7 @@ io.on('connection', function (socket){
         click_action: "openapp",
         sound:"sound",
        tag:"handicap",
-       notificationId :"100"
+       notificationId :100
       },
       data: {
         senderId:sender.id,
