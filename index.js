@@ -294,6 +294,7 @@ io.on('connection', function (socket){
       priority: "high"
     };
     var token=destanation.firebaseId;
+    console.log('token dsadsadasdsadasdsa '+token);
     console.log('token   '+token);
     admin.messaging().sendToDevice(token, notification, options)
       .then(function(response) {
