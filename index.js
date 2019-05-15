@@ -281,13 +281,14 @@ io.on('connection', function (socket){
     console.log('send notification');
     var mes= " وصلتك "+totmessages+ " رسالة جديدة ";
     var notification = {
+
+      notificationId :100
       notification: {
         title: mes,
         body: "",
         click_action: "openapp",
         sound:"sound",
-       tag:"handicap",
-       notificationId :100
+       tag:"handicap"
       },
       data: {
         senderId:sender.id,
