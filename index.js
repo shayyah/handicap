@@ -266,7 +266,7 @@ io.on('connection', function (socket){
         body: "",
         click_action: "openapp",
         sound:"sound",
-       tag:"hanicap"
+       tag:"handicap"
       },
       data: {
         senderId:sender.id,
