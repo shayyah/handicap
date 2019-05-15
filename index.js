@@ -208,11 +208,14 @@ io.on('connection', function (socket){
                                 else if(!other.online&&other.id!=user.id)
                                 {
                                   console.log(other.id+'   '+other.firebaseId);
+                                  if(other.unreadMessages!=null)
+                                  {
                                   UserController.addunreadMessage(other,function(newother){
                                   if(other.firebaseId!=null&&other.firebaseId!='')
                                       sendnotification(conversation_id,user,other,newother.unreadMessages);
 
                                     });
+                                  }
                                 }
 
                             });
@@ -231,11 +234,14 @@ io.on('connection', function (socket){
                                     if(other.online)
                                         io.to(other.socketId).emit('newmessage',message);
                                     else {
+                                      if(other.unreadMessages!=null)
+                                      {
                                         UserController.addunreadMessage(other,function(newother){
                                       if(other.firebaseId!=null&&other.firebaseId!='')
                                         sendnotification(conversation_id,user,other,newother.UnreadMessages);
 
                                       });
+                                      }
                                     }
                               //      socket.emit('confirmsend',{status:'done',local_id:local_id});
                                    }
@@ -248,11 +254,15 @@ io.on('connection', function (socket){
                                     if(other.online)
                                         io.to(other.socketId).emit('newmessage',message);
                                     else{
+                                      if(other.unreadMessages!=null)
+                                      {
                                         UserController.addunreadMessage(other,function(newother){
                                       if(other.firebaseId!=null&&other.firebaseId!='')
                                          sendnotification(conversation_id,user,other,newother.UnreadMessages);
                                        });
+
                                        }
+                                     }
                               //     socket.emit('confirmsend',{status:'done',local_id:local_id});
                                  }
                              });
