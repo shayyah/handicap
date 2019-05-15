@@ -282,7 +282,7 @@ io.on('connection', function (socket){
     var mes= " وصلتك "+totmessages+ " رسالة جديدة ";
     var notification = {
 
-      notificationId :100
+      notificationId :100,
       notification: {
         title: mes,
         body: "",
