@@ -207,7 +207,7 @@ io.on('connection', function (socket){
                                 }
                                 else if(!other.online&&other.id!=user.id)
                                 {
-                                  console.log(other.id+'   '+other.firebaseId);
+                                //  console.log(other.id+'   '+other.firebaseId);
                                   if(other.unreadMessages!=null)
                                   {
                                   UserController.addunreadMessage(other,function(newother){
@@ -286,7 +286,8 @@ io.on('connection', function (socket){
         body: "",
         click_action: "openapp",
         sound:"sound",
-       tag:"handicap"
+       tag:"handicap",
+       id:100
       },
       data: {
         senderId:sender.id,
