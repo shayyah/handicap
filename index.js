@@ -265,7 +265,8 @@ io.on('connection', function (socket){
         title: "وصلتك رسالة جديدة",
         body: "",
         click_action: "openapp",
-        sound:"sound"
+        sound:"sound",
+       tag:"hanicap"
       },
       data: {
         senderId:sender.id,
