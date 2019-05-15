@@ -42,7 +42,7 @@ var userSchema=mongoose.Schema({
       required:false
     },
     unreadMessages:{
-      type:Integer,
+      type:Number,
       required:false
     },
     lastOnline:{
