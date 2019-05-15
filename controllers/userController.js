@@ -197,6 +197,7 @@ exports.ModifyUserDate=  function(userId,date)
     }
   exports.addunreadMessage=function(user,callback)
   {
+  //  if(user.unreadMessages==null)user.unreadMessages=0;
     user.unreadMessages++;
     user.save(function(err){
         if(err)callback(null)
@@ -208,6 +209,7 @@ exports.LoginSocket=function(user,socketId,callback)
 {
   user.online=true;
   user.socketId=socketId;
+
   user.unreadMessages=0;
   user.save(function(err){
       if(err)callback(null);
