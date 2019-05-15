@@ -281,8 +281,7 @@ io.on('connection', function (socket){
     console.log('send notification');
     var mes= " وصلتك "+totmessages+ " رسالة جديدة ";
     var notification = {
-
-      notificationId :100,
+ 
       notification: {
         title: mes,
         body: "",
