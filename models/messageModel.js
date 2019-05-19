@@ -29,6 +29,10 @@ var messageSchema=mongoose.Schema({
       type:Date,
       required:false
     },
+    appdate:{
+      type:String,
+      required:false
+    }
 });
 var Message = module.exports = mongoose.model('Message', messageSchema);
 module.exports.get = function (callback, limit) {

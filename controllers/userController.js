@@ -238,6 +238,7 @@ exports.CreateNewMessage=function(user,conversation_id,text,mSound,mDate,callbac
     message.text=text;
     message.senderId=user.id;
     message.date=mDate;
+    message.appdate=convertDate(mDate);
     console.log('mmmm  '+JSON.stringify(message));
     message.save(function(err){
       console.log(err);
@@ -247,6 +248,13 @@ exports.CreateNewMessage=function(user,conversation_id,text,mSound,mDate,callbac
         callback(message);
       }
     })
+}
+function convertDate(date)
+{
+  console.log(date+'   '+date.getMonth());
+    var newDate=date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+    console.log(newDate);
+    return newDate;
 }
 function GetUserByPhone(Userphone,callback)
     {
@@ -261,4 +269,3 @@ function GetUserByPhone(Userphone,callback)
   //        callback(result);
 
     }
-  
