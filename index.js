@@ -205,7 +205,9 @@ io.on('connection', function (socket){
                     //            console.log('other  '+other.id+ '   '+ other.online+'   '+other.socketId);
                               //  console.log(user.id);
                                 if(other.online&&other.id!=user.id){
+                                  console.log('dd   '+message.date);
                                     message.date=convertDate(message.date);
+                                    console.log(message.date);
                                   io.to(other.socketId).emit('newmessage',message);
                                 }
                                 else if(!other.online&&other.id!=user.id)
@@ -318,6 +320,7 @@ io.on('connection', function (socket){
   }
   function convertDate(date)
   {
+    console.log(date);
       var newDate=date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
       console.log(newDate);
       return newDate;
