@@ -13,8 +13,8 @@ var server = require('http').Server(app);
 var serveStatic = require('serve-static');  // serve static files
 var io = require('socket.io')(server);
 var cors = require('cors');
- var fs=require('fs');
- var admin = require("firebase-admin");
+var fs=require('fs');
+var admin = require("firebase-admin");
 
 
 
@@ -122,6 +122,7 @@ io.on('connection', function (socket){
               UserController.UnreadMessages(user,conversation.id,function(messages){
                   console.log('messages   '+JSON.stringify(messages));
                   messages.forEach(message=>{
+                    message.date=convertDate(message.date);
                       socket.emit('newmessage',message);
                   });
 
@@ -130,8 +131,10 @@ io.on('connection', function (socket){
             UserController.UnreadMessages(user,'0',function(messages){
                 console.log('messages   '+JSON.stringify(messages));
                 messages.forEach(message=>{
-                  if(message.senderId!=user.id)
+                  if(message.senderId!=user.id){
+                    message.date=convertDate(message.date);
                     socket.emit('newmessage',message);
+                  }
                 });
 
             });
@@ -202,7 +205,7 @@ io.on('connection', function (socket){
                     //            console.log('other  '+other.id+ '   '+ other.online+'   '+other.socketId);
                               //  console.log(user.id);
                                 if(other.online&&other.id!=user.id){
-
+                                    message.date=convertDate(message.date);
                                   io.to(other.socketId).emit('newmessage',message);
                                 }
                                 else if(!other.online&&other.id!=user.id)
@@ -231,8 +234,10 @@ io.on('connection', function (socket){
                                UserController.getUser(conversation.other_id,function(other){
                                  if(other!=null)
                                   {
-                                    if(other.online)
+                                    if(other.online){
+                                      message.date=convertDate(message.date);
                                         io.to(other.socketId).emit('newmessage',message);
+                                      }
                                     else {
                                       if(other.unreadMessages!=null)
                                       {
@@ -251,8 +256,10 @@ io.on('connection', function (socket){
                              UserController.getUser(conversation.creator_id,function(other){
                                  if(other!=null)
                                   {
-                                    if(other.online)
+                                    if(other.online){
+                                      message.date=convertDate(message.date);
                                         io.to(other.socketId).emit('newmessage',message);
+                                      }
                                     else{
                                       if(other.unreadMessages!=null)
                                       {
@@ -308,6 +315,12 @@ io.on('connection', function (socket){
       .catch(function(error) {
         console.log("Error sending message:", error);
       });
+  }
+  function convertDate(date)
+  {
+      var newDate=date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+      console.log(newDate);
+      return newDate;
   }
   socket.on('disconnect', () => {
     console.log('disscooonect  '+myId);

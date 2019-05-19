@@ -21,7 +21,10 @@ exports.login = function (req, res) {
         {
             if(MyUser.password!=password)
               res.json({message:'wrong password or phone'});
-            else res.json(MyUser);
+            else {
+              //MyUser.date=convertDate(MyUser.date);
+              res.json(MyUser);
+            }
         }
         else res.json({message:'error'});
       });
@@ -258,3 +261,4 @@ function GetUserByPhone(Userphone,callback)
   //        callback(result);
 
     }
+  
