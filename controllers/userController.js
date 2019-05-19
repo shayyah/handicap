@@ -252,7 +252,7 @@ exports.CreateNewMessage=function(user,conversation_id,text,mSound,mDate,callbac
 function convertDate(date)
 {
   console.log(date+'   '+date.getMonth());
-    var newDate=date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+    var newDate=date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
     console.log(newDate);
     return newDate;
 }
