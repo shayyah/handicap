@@ -153,6 +153,7 @@ io.on('connection', function (socket){
         });
   });
   socket.on('createConversation',function(data){
+    console.log(data.creator_id+'   '+data.other_phone);
     var creator_id=data.creator_id;
     var phone=data.other_phone;
     UserController.getUserByPhone(phone,function(other){
@@ -162,6 +163,7 @@ io.on('connection', function (socket){
         {
             socket.emit('conversationCreated',conversation);
         }
+        else socket.emit('error','Conversation');
     });
   });
   });
