@@ -6,11 +6,14 @@ exports.createConversation=function(creator_id,other_id,callback){
     var date=new Date();
     findConversation(creator_id,other_id,function(conversation){
       if(conversation!=null){
+            callback(conversation);
+      }
+      else {
         UserController.getUser(creator_id,function(creator){
               UserController.getUser(other_id,function(other){
                   if(creator!=null&&other!=null){
-                    saveConversation(creator,other,date,function(conversation){
-                        callback(conversation);
+                    saveConversation(creator,other,date,function(Newconversation){
+                        callback(Newconversation);
                     });
                   }
                   else {
@@ -19,9 +22,6 @@ exports.createConversation=function(creator_id,other_id,callback){
               });
         });
 
-      }
-      else {
-        callback(conversation);
       }
     })
 

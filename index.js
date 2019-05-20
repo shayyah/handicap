@@ -157,6 +157,8 @@ io.on('connection', function (socket){
     var creator_id=data.creator_id;
     var phone=data.other_phone;
     UserController.getUserByPhone(phone,function(other){
+      if(other!=null){
+      console.log(other.id);
     var other_id=other.id;
     ConversationController.createConversation(creator_id,other_id,function(conversation){
         if(conversation!=null)
@@ -165,7 +167,8 @@ io.on('connection', function (socket){
         }
         else socket.emit('error','Conversation');
     });
-  });
+  }
+    });
   });
 
   socket.on('sendmessage',function(data){
