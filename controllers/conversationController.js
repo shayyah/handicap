@@ -56,7 +56,7 @@ function findConversation(creator_id,other_id,callback){
         callback(result);
       }
       else {
-        conversation.findOne(query2,function(err2,result2){
+        Conversation.findOne(query2,function(err2,result2){
           if(result2!=null)
           {
             callback(result2);
