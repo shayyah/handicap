@@ -27,7 +27,7 @@ exports.createConversation=function(creator_id,other_id,callback){
 
 
 }
-exports.getConversatios=function(id,callback){
+exports.getConversation=function(id,callback){
   Conversation.findOne({id:id},function(err,res){
       if(err)callback(null);
       else callback(res);

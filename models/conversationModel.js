@@ -25,7 +25,7 @@ var conversationSchema=mongoose.Schema({
       required:false
     }
 });
-var Conversation =module.exports=mongoose.model('Concersation',conversationSchema);
+var Conversation =module.exports=mongoose.model('Conversation',conversationSchema);
 module.exports.get = function (callback, limit) {
     Conversation.find(callback).limit(limit);
 }
