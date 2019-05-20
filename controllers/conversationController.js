@@ -1,13 +1,24 @@
 var shortid = require('short-id');
 var fs=require('fs');
 Conversation =require('../models/conversationModel.js');
+UserController =require('../controllers/userController');
 exports.createConversation=function(creator_id,other_id,callback){
     var date=new Date();
     findConversation(creator_id,other_id,function(conversation){
       if(conversation!=null){
-        createConversation(creator_id,other_id,date,function(conversation){
-            callback(conversation);
+        UserController.getUser(creator_id,function(creator){
+              UserController.getUser(other_id,function(other){
+                  if(creator!=null&&other!=null){
+                    saveConversation(creator,other,date,function(conversation){
+                        callback(conversation);
+                    });
+                  }
+                  else {
+                    callback(null);
+                  }
+              });
         });
+
       }
       else {
         callback(conversation);
@@ -22,11 +33,13 @@ exports.getConversatios=function(id,callback){
       else callback(res);
   });
 }
-function saveConversation(creator_id,other_id,date,callback){
+function saveConversation(creator,other,date,callback){
   var conversation =new Conversation();
   conversation.id=shortid.generate();
-  conversation.creator_id=creator_id;
-  conversation.other_id=other_id;
+  conversation.creator_id=creator.id;
+  conversation.other_id=other.id;
+  conversation.creator_name=creator.name;
+  conversation.other_name=other.name;
   conversation.date=date;
   conversation.save((err)=>{
       if(err)callback(null);

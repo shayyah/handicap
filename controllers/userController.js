@@ -269,3 +269,10 @@ function GetUserByPhone(Userphone,callback)
   //        callback(result);
 
     }
+  exports.getUserByPhone=function(Userphone,callback)
+  {
+    User.findOne({phone:Userphone},function(err,user){
+        if(err)callback(null);
+        callback(user);
+    });
+  }

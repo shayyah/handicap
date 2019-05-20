@@ -155,7 +155,7 @@ io.on('connection', function (socket){
   socket.on('createConversation',function(data){
     var creator_id=data.creator_id;
     var phone=data.other_phone;
-    UserController.GetUserByPhone(phone,function(other){
+    UserController.getUserByPhone(phone,function(other){
     var other_id=other.id;
     ConversationController.createConversation(creator_id,other_id,function(conversation){
         if(conversation!=null)

@@ -12,6 +12,14 @@ var conversationSchema=mongoose.Schema({
       type:String,
         required:true
     },
+    creator_name:{
+      type:String,
+      required:false
+    },
+    other_name:{
+      type:String,
+      required:false
+    },
     date_created:{
       type:String,
       required:false
