@@ -50,7 +50,7 @@ function saveConversation(creator,other,date,callback){
 function findConversation(creator_id,other_id,callback){
   var query={'creator_id':creator_id,'other_id':other_id};
   var query2={'creator_id':other_id,'other_id':creator_id};
-  conversation.findOne(query,function(err,result){
+  Conversation.findOne(query,function(err,result){
       if(result!=null)
       {
         callback(result);
