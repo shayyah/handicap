@@ -184,6 +184,7 @@ io.on('connection', function (socket){
       console.log('sound: '+sound);
       console.log('text: '+text);
       console.log('local_id  '+local_id  );
+      //sadsadsa
       //dasdsa
       var date=new Date();
       UserController.getUser(senderId,function(user){
