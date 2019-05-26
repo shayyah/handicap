@@ -235,7 +235,7 @@ io.on('connection', function (socket){
                         });
                     }
                      else {
-                       Conversation.getConversation(conversation_id,function(conversation){
+                       ConversationController.getConversation(conversation_id,function(conversation){
                         if(conversation!=null){
                            if(conversation.creator_id==senderId)
                            {

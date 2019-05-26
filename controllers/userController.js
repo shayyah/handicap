@@ -234,9 +234,10 @@ exports.CreateNewMessage=function(user,conversation_id,text,mSound,mDate,callbac
     message.id=shortid.generate();
     message.conversation_id=conversation_id;
     message.sound=mSound;
-    message.nameSound=user.sound;
+    message.nameSound='';
     message.text=text;
     message.senderId=user.id;
+    message.senderName=user.name;
     message.date=mDate;
     message.appdate=convertDate(mDate);
     console.log('mmmm  '+JSON.stringify(message));

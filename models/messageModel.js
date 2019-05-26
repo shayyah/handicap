@@ -9,6 +9,10 @@ var messageSchema=mongoose.Schema({
       type:String,
       required:true
     },
+    senderName:{
+        type:String,
+        required:false
+    },
     conversation_id:{
       type:String,
       required:true
