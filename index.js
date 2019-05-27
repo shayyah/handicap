@@ -251,7 +251,7 @@ io.on('connection', function (socket){
                                       {
                                         UserController.addunreadMessage(other,function(newother){
                                       if(other.firebaseId!=null&&other.firebaseId!='')
-                                        sendnotification(conversation_id,user,other,newother.UnreadMessages);
+                                        sendnotification(conversation_id,user,other,newother.unreadMessages);
 
                                       });
                                       }
@@ -273,7 +273,7 @@ io.on('connection', function (socket){
                                       {
                                         UserController.addunreadMessage(other,function(newother){
                                       if(other.firebaseId!=null&&other.firebaseId!='')
-                                         sendnotification(conversation_id,user,other,newother.UnreadMessages);
+                                         sendnotification(conversation_id,user,other,newother.unreadMessages);
                                        });
 
                                        }
