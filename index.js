@@ -52,7 +52,7 @@ app.get('/', function(req, res) {
 
 });
 app.get('/locations', function(req, res) {
-  fs.readFile('locations/locations.html',function (err, data){
+  fs.readFile('locations/index.htm',function (err, data){
        res.writeHead(200, {'Content-Type': 'text/html','Content-Length':data.length});
        res.write(data);
        res.end();
@@ -102,10 +102,13 @@ io.on('connection', function (socket){
               myId=user.id;
               UserController.LoginSocket(user,socketId,function(MyUser){
                 if(MyUser!=null)
-                        console.log('logiiii  '+JSON.stringify(user));
+                  {    console.log('logiiii  '+JSON.stringify(user));
                     socket.emit('logindone',user);
+                  }
+                  else socket.emit('error',{error:'Login'});
               });
             }
+            else socket.emit('error',{error:'Login'});
       });
 
 
@@ -165,7 +168,7 @@ io.on('connection', function (socket){
         {
             socket.emit('conversationCreated',conversation);
         }
-        else socket.emit('error','Conversation');
+        else socket.emit('error',{error:'Conversation'});
     });
   }
     });

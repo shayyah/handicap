@@ -19,36 +19,21 @@
 </head>
 
 <body ng-app="myApp" ng-controller="locationCtrl">
-
+   
+ 
   <div class="container mt-5">
+   
+     <div class="row mb-5">
+      <div class="col-md-6">
+       <a href="addLocation.htm" ><button class="btn btn-primary mt-4" > Add New Location </button></a>
+      </div>
+        <div class="col-md-6 mt-4">
+       <h4 style="font-weight:bold;float: right;" > Map Satellite</h4>
+        </div>
+  </div>
+
     <div class="row mb-5">
-    <div class="col-md-3">
-         <label class="bold">Address:</label>
-    <input type="text" class="form-control" id="Address" placeholder="Enter Address" name="Address" 
-    ng-model="Address" ng-change="getAddress(Address)">
-    </div>
-
-   <div class="col-md-3">
-        <label class="bold">Longitude:</label>
-    <input type="tex" class="form-control" id="Longitude" placeholder="Enter Longitude" name="Longitude"
-    ng-model="Longitude" ng-change="getLongitude(Longitude)">
-   </div>
-
-    <div class="col-md-3">
-      <label class="bold">Latitude:</label>
-    <input type="text" class="form-control" id="Latitude" placeholder="Enter Latitude " name="Latitude"
-    ng-model="Latitude" ng-change="getLatitude(Latitude)">  
-    </div>
-
-
-    <div class="col-md-3 mt-4" >
-                 <button  class="btn btn-primary mt-1" ng-click="send(Address,Latitude,Longitude);clearCash()">Submit</button>
-
-    </div>
-
-
-<!-- Map -->
-  <div class="mt-5" id="map1" style="height:400px;width:100%;"></div>
+  <div class="mt-5" id="map1" style="height:670px;width:100%;"></div>
   </div>
 <!-- map-->
 
@@ -56,7 +41,6 @@
 <table class="table table-hover table-striped">
     <thead class="thead-dark">
       <tr>
-
         <th>Text</th>
         <th>Longitude</th>
         <th>Latitude</th>
@@ -71,10 +55,8 @@
           <td>{{i.address}}</td>
       </tr>
   
-
     </tbody>
   </table>
-
 </div>-->
 
 
@@ -86,14 +68,8 @@
  
 
 <script>
-
-
 var app = angular.module('myApp', []);
 app.controller('locationCtrl', function($scope, $rootScope,$http) {
-console.log("Hello!");
-
-
-
 
 /** Get all Location**/
  $http({
@@ -110,42 +86,28 @@ console.log("Hello!");
           $scope.locationlist=response.data.publicLocations;
          
  
-            $scope.FillData($scope.locationlist);
+            $scope.FillData(true);
             
-
             }, function (response) { 
-
-
         });
       
-
 /** Get all Location End**/
 
-
-$scope.Arr=[];
-console.log($scope.Obj);
 $scope.send=function(a,b,c)
 {
 /*** Test **/
-
-
-
 /**Test End**/
 /**my json**/
     var obj = angular.copy({text:a,latitude:b,longitude:c,address:""});
+
+
+
     $scope.Arr.push(obj);
-
-
 console.log($scope.Arr);
-
 $scope.publicLocations = JSON.stringify($scope.Arr);
 console.log($scope.publicLocations );
-
-
 /**my json**/
-
 /** Request **/
-
     $http({
         method: 'post',
         url:'https://almacfufin.herokuapp.com/api/admin/location',
@@ -156,8 +118,6 @@ console.log($scope.publicLocations );
     }).then(function (response) {
       console.log(response.data);
       /** Get All Again**/
-
-
    $http({
         method: 'GET',
         url:'https://almacfufin.herokuapp.com/api/admin/location',
@@ -170,26 +130,17 @@ console.log($scope.publicLocations );
           $scope.locationlist=response.data.publicLocations;
           
                         console.log($scope.locationlist);
-
-
                 }, function (response) {
             console.log(response.data);
-
-
         });
-
-
           /** Get All Again End**/
-
                     }, function (response) {
                 console.log(response.data);
-
-
         });
-
 /** Request End **/
-
 }
+
+
 
 $scope.clearCash=function()
 {
@@ -197,21 +148,19 @@ $scope.clearCash=function()
          $scope.Latitude=""; 
          $scope.Longitude=""; 
 }
-
-
-
 /***Their Code***/
-
- $scope.FillData=function(locations)
+ $scope.FillData=function(centerMap)
  {
     $scope.markers = [];
     var Dubai = { lat:33.2048, lng: 36.5555 };
+ 
 
-    var map = new google.maps.Map(document.getElementById('map1'), {
-        zoom: 10,
-        center: Dubai,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    });
+     
+      var map = new google.maps.Map(document.getElementById('map1'), {
+          zoom: 10,
+          center: Dubai,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+      }); 
 
     //Center two map at user location
     if (navigator.geolocation) {
@@ -220,61 +169,98 @@ $scope.clearCash=function()
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
-
             map.setCenter(pos);  
         },
         function () {}, { timeout: 5000 }); 
     }
-
     var prev_infowindow = false;
-
     for(i=0; i<$scope.locationlist.length; i++)
     {
-
         var markerlatLng = new google.maps.LatLng($scope.locationlist[i].latitude, $scope.locationlist[i].longitude); 
         var name = $scope.locationlist[i].text;
-        var content = '<b>Title: </b>' + $scope.locationlist[i].text ;
-
-
-
+        var content = '<b>Title: </b>' + $scope.locationlist[i].text +
+        '<input type="button" value="Delete" class="btn btn-primary deleteButton ml-2" id="'+$scope.locationlist[i]
+        .id+'">' ;
         var marker = new google.maps.Marker({
             position: markerlatLng,
             title: name,
             map: map
         });
-
         $scope.markers.push(marker);
         var infowindow = new google.maps.InfoWindow({
             content: content
         });
-
         google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){
             return function () {
-
                 if (prev_infowindow) {
                     prev_infowindow.close();
                 }
-
                 prev_infowindow = infowindow;
                 infowindow.setContent(content);
                 infowindow.open(map,marker);
             };
         })(marker,content,infowindow));
     }
-
-
     // Add a marker clusterer to manage the markers.
     var markerCluster = new MarkerClusterer(map, $scope.markers,
      { imagePath: './Content/map/m'  });
-
  }
-
-
 /**Their Code End**/
+
+$scope.deleteMe=function(x)
+{
+console.log('hello people!');
+}
+
+
+$('body').on('click', '.deleteButton', function() {
+     $scope.myId=this.id;
+     console.log($scope.myId)
+ /*   alert(this.id);*/
+
+       $http({
+            method: 'put',
+            url:'https://almacfufin.herokuapp.com/api/admin/location',
+          data:{id: $scope.myId}
+            
+        }).then(function (response) {
+         
+                      console.log( response.data);
+                      //$scope.alert=alert("location's Been Deleted Successfully!");
+
+                      $scope.oldLocationlist = $scope.locationlist;
+
+                      $scope.locationlist = [];
+
+                      for(i=0; i<$scope.oldLocationlist.length; i++)
+                      {
+                          if($scope.oldLocationlist[i].id != $scope.myId)
+                          {
+                            $scope.locationlist.push($scope.oldLocationlist[i]); 
+                          }
+                      }
+ 
+
+                      $scope.FillData(false);
+
+                  }, function (response) {
+                      console.log( response.data);
+                      $scope.alert=alert("Some Thing's Wrong!");
+             });
+    
+
+});
+
 });
 
 
 </script> 
+
+<script type="text/javascript">
+  
+
+
+</script>
 
 <script src="./Content/markerclusterer.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBl4Pzqz_A5zt10KpJI4urZPothek-Y2a8&callback=initMap"
