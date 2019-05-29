@@ -105,6 +105,7 @@ exports.addpubliclocation=function(req,res){
         var latitude=parseFloat(req.body.latitude);
         var address=req.body.address;
         var ispublic=true;
+
         console.log('addpublic  '+address);
         var text=req.body.text;
         console.log(address);
@@ -207,7 +208,7 @@ function GetMyLocations (id,callback){
   });
 }
 function GetAllPublicLocations(callback){
-  var query={'isPublic':true};
+  var query={'isPublic':true,'deleted':false};
   Location.find(query,function(err,result){
     if(err)callback(null);
     callback(result);
