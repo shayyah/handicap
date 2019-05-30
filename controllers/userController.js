@@ -92,6 +92,7 @@ function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rd
         user.location_count=0;
         user.firebaseId='';
         user.unreadMessages=0;
+        user.lastUnreadMessage='';
     //  console.log(JSON.stringify(User));
     //  fs.writeFile(path+user.id,rsound,(err)=>{
   //     if(err)callback(err);
@@ -198,10 +199,17 @@ exports.ModifyUserDate=  function(userId,date)
         callback(AllDateMessages);
 
     }
-  exports.addunreadMessage=function(user,callback)
+  exports.addunreadMessage=function(user,conversationId,callback)
   {
   //  if(user.unreadMessages==null)user.unreadMessages=0;
     user.unreadMessages++;
+    if(user.lastUnreadMessage!=null&&user.lastUnreadMessage!=conversationId)
+    {
+      user.lastUnreadMessage='-1';
+    }
+    else {
+      user.lastUnreadMessage=conversationId;
+    }
     user.save(function(err){
         if(err)callback(null)
         callback(user);

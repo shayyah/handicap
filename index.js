@@ -224,9 +224,9 @@ io.on('connection', function (socket){
                                 //  console.log(other.id+'   '+other.firebaseId);
                                   if(other.unreadMessages!=null)
                                   {
-                                  UserController.addunreadMessage(other,function(newother){
+                                  UserController.addunreadMessage(other,conversation_id,function(newother){
                                   if(other.firebaseId!=null&&other.firebaseId!='')
-                                      sendnotification(conversation_id,user,other,newother.unreadMessages);
+                                      sendnotification(conversation_id,user,other,newother.unreadMessages,newother.lastUnreadMessage);
 
                                     });
                                   }
@@ -252,9 +252,9 @@ io.on('connection', function (socket){
                                     else {
                                       if(other.unreadMessages!=null)
                                       {
-                                        UserController.addunreadMessage(other,function(newother){
+                                        UserController.addunreadMessage(other,conversation_id,function(newother){
                                       if(other.firebaseId!=null&&other.firebaseId!='')
-                                        sendnotification(conversation_id,user,other,newother.unreadMessages);
+                                        sendnotification(conversation_id,user,other,newother.unreadMessages,newother.lastUnreadMessage);
 
                                       });
                                       }
@@ -274,9 +274,9 @@ io.on('connection', function (socket){
                                     else{
                                       if(other.unreadMessages!=null)
                                       {
-                                        UserController.addunreadMessage(other,function(newother){
+                                        UserController.addunreadMessage(other,conversation_id,function(newother){
                                       if(other.firebaseId!=null&&other.firebaseId!='')
-                                         sendnotification(conversation_id,user,other,newother.unreadMessages);
+                                         sendnotification(conversation_id,user,other,newother.unreadMessages,newother.lastUnreadMessage);
                                        });
 
                                        }
@@ -294,10 +294,12 @@ io.on('connection', function (socket){
 
       });
   });
-  function sendnotification(conversation_Id,sender,destanation,totmessages)
+  function sendnotification(conversation_Id,sender,destanation,totmessages,lastUnreadMessage)
   {
     console.log('send notification');
     var mes= " وصلتك "+totmessages+ " رسالة جديدة ";
+    if(lastUnreadMessage!=null&&lastUnreadMessage=='-1')
+        conversation_Id='-1';
     var notification = {
       notification: {
         title: mes,

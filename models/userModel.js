@@ -48,7 +48,11 @@ var userSchema=mongoose.Schema({
     lastOnline:{
       type:Date,
       required:false
-    }
+    },
+    lastUnreadMessage:{
+      type:String,
+      required:false
+    },
 });
 var User = module.exports = mongoose.model('User', userSchema);
 module.exports.get = function (callback, limit) {
