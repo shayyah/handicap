@@ -222,6 +222,7 @@ exports.LoginSocket=function(user,socketId,callback)
   user.socketId=socketId;
 
   user.unreadMessages=0;
+  user.lastUnreadMessage='';
   user.save(function(err){
       if(err)callback(null);
       else callback(user);
