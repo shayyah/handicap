@@ -201,9 +201,9 @@ exports.ModifyUserDate=  function(userId,date)
     }
   exports.addunreadMessage=function(user,conversationId,callback)
   {
-  //  if(user.unreadMessages==null)user.unreadMessages=0;
+   if(user.unreadMessages==null)user.unreadMessages=0;
     user.unreadMessages++;
-    if(user.lastUnreadMessage!=null&&user.lastUnreadMessage!=conversationId)
+    if(user.lastUnreadMessage!=null&&user.lastUnreadMessage!=''&&user.lastUnreadMessage!=conversationId)
     {
       user.lastUnreadMessage='-1';
     }
