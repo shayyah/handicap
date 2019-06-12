@@ -102,19 +102,19 @@ io.on('connection', function (socket){
               myId=user.id;
               UserController.LoginSocket(user,socketId,function(MyUser){
                 if(MyUser!=null)
-                {    
+                {
                     console.log('logiiii  '+JSON.stringify(user));
                     socket.emit('logindone',user);
                 }
-                else { 
+                else {
                     console.log('error in login ');
-                    socket.emit('error',{error:'Login'}); 
+                    socket.emit('error',{error:'Login'});
                 }
               });
             }
-            else { 
+            else {
                 console.log('error in login ');
-                socket.emit('error',{error:'Login'}); 
+                socket.emit('error',{error:'Login'});
             }
       });
 
@@ -220,9 +220,9 @@ io.on('connection', function (socket){
 
                     //            console.log('other  '+other.id+ '   '+ other.online+'   '+other.socketId);
                               //  console.log(user.id);
-                                
+
                                 console.log("reciver status: "+other.online);
-                                
+
                                 if(other.online&&other.id!=user.id){
                                   console.log('dd   '+message.date);
                             //        message.date=convertDate(message.date);
@@ -345,7 +345,7 @@ io.on('connection', function (socket){
         UserController.getUser(myId,function(user){
             if(user!=null)
             {
-              //    console.log(JSON.stringify(user));
+                  console.log(JSON.stringify(user));
               UserController.DisconnectSocket(user);
             }
         });
