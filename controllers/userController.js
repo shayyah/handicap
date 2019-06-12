@@ -232,12 +232,12 @@ exports.LoginSocket=function(user,socketId,callback)
 exports.DisconnectSocket=function(user)
 {
   user.online=false;
-    console.log(user.lastOnline);
+    //console.log(user.lastOnline);
 
-    var dd=new Date( Date.now() - 2000 * 60 );
-    console.log(dd);
-  user.lastOnline=dd;
-  console.log(user.lastOnline);
+    var newdate=new Date( Date.now() - 2000 * 60 );
+  //  console.log(dd);
+  user.lastOnline=newdate;
+  //console.log(user.lastOnline);
   user.save(function(err){
       if(err)console.log('error');
       else console.log('Disconnected');
