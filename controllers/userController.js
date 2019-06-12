@@ -231,7 +231,8 @@ exports.LoginSocket=function(user,socketId,callback)
 exports.DisconnectSocket=function(user)
 {
   user.online=false;
-  user.lastOnline=new Date();
+  user.lastOnline=new Date( Date.now() - 2000 * 60 );
+  console.log(lastOnline);
   user.save(function(err){
       if(err)console.log('error');
       else console.log('Disconnected');
