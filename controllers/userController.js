@@ -14,6 +14,7 @@ Message=require('../models/messageModel.js');
 var path="/app/sound/";
 // Import fs
 exports.login = function (req, res) {
+  console.log('login');
   var phone=req.query.phone;
       var password=req.query.password;
       GetUserByPhone(phone,function(MyUser){
