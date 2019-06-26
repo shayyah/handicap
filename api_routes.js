@@ -77,6 +77,11 @@ router.route('/admin/location')
 router.route('/mylocations')
   .get(locationController.getmylocations);
 
+var videoController=require('./controllers/videoConversationController');
+router.route('/call')
+  .post(videoController.addnewroom)
+  .put(videoController.answercall)
+  .get(videoController.getAllUnansweredCall);
 
 // Export API routes
 module.exports = router;

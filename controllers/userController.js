@@ -13,6 +13,14 @@ Message=require('../models/messageModel.js');
 // Import short-id
 var path="/app/sound/";
 // Import fs
+UserRole={
+  Blind:'Blind',
+  Volunteer:'Volunteer',
+  Admin:'Admin'
+};
+
+
+
 exports.login = function (req, res) {
   console.log('login');
   var phone=req.query.phone;
@@ -35,14 +43,15 @@ exports.register = function (req, res) {
   console.log('regggggggggg');
   var name=req.body.name;
       var phone=req.body.phone;
+      var role=req.body.role;
 //      var token=req.body.token;
       var password=req.body.password;
       var sound=req.body.sound;
         var dateModified=new Date("2019-01-01T00:00:00.123Z");
       GetUserByPhone(phone,function(user){
-        if(user==null)
+        if(user==null&&UserRole[role])
         {
-            CreateUserAndAddToDataBase(name,phone,password,sound,dateModified,function(myUser){
+            CreateUserAndAddToDataBase(name,phone,password,sound,dateModified,role,function(myUser){
             if(myUser!=null)
               res.json(myUser);
             else res.json({message:'error'});
@@ -50,7 +59,12 @@ exports.register = function (req, res) {
         }
         else
         {
-          res.json({message:'phone already exist'});
+          if(user!=null)
+            res.json({message:'phone already exist'});
+          else {
+            res.json({message:'wrong role'});
+
+          }
         }
       })
 
@@ -78,7 +92,7 @@ exports.register = function (req, res) {
       });
 
   }
-function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rdate,callback)
+function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rdate,rrole,callback)
     {
       var user=new User();
           user.id=shortid.generate();
@@ -94,6 +108,7 @@ function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rd
         user.firebaseId='';
         user.unreadMessages=0;
         user.lastUnreadMessage='';
+        user.role=rrole;
     //  console.log(JSON.stringify(User));
     //  fs.writeFile(path+user.id,rsound,(err)=>{
   //     if(err)callback(err);
@@ -264,6 +279,13 @@ exports.CreateNewMessage=function(user,conversation_id,text,mSound,mDate,callbac
         callback(message);
       }
     })
+}
+exports.getAllVolunteers=function(callback){
+  var query={'role':UserRole.Volunteer};
+  User.find(query,function(err,res){
+    if(err)callback(null)
+    callback(res);
+  });
 }
 function convertDate(date)
 {

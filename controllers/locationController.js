@@ -9,7 +9,9 @@ var UserController =require('../controllers/userController');
 //MongoClient.connect(db_uri, db_params,function(err,db){
 //    dbo =db.db('blind_support_data');
 //});
-var path="C:/Users/salim-s/Desktop/blind support/sound/"
+var path="C:/Users/salim-s/Desktop/blind support/sound/";
+
+
 exports.getlocations=function(req,res){
 
 
