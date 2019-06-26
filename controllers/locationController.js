@@ -71,7 +71,7 @@ exports.addlocation=function(req,res){
         console.log(address);
         UserController.getUser(id,function(MyUser){
 
-          if(MyUser!=null&&MyUser.location_count<20)
+          if(MyUser!=null&&MyUser.role==UserRole.Blind&&MyUser.location_count<20)
             {
               CreateLocationAndAddToDataBase(id,longitude,latitude,address,text,ispublic,function(myLocation){
               if(myLocation!=null)
@@ -191,7 +191,7 @@ exports.getnearbylocation=function(req,res){
   };
   UserController.getUser(id,function(MyUser){
 //    console.log(JSON.stringify(MyUser));
-      if(MyUser!=null)
+      if(MyUser!=null&&MyUser.role==UserRole.Blind)
       {
           GetNearbyUnapprovedLocations(UserLocation,function(locations){
             if(locations!=null)

@@ -96,7 +96,7 @@ io.on('connection', function (socket){
   socket.on('login', function (data) {
       console.log('logined user');
       UserController.getUser(data.id,function(user){
-            if(user!=null)
+            if(user!=null&&user.role==UserRole.Blind)
             {
 
               myId=user.id;
@@ -343,7 +343,7 @@ io.on('connection', function (socket){
   socket.on('disconnect', () => {
     console.log('disscooonect  '+myId);
         UserController.getUser(myId,function(user){
-            if(user!=null)
+            if(user!=null&&user.role==UserRole.Blind)
             {
                   console.log(JSON.stringify(user));
               UserController.DisconnectSocket(user);
