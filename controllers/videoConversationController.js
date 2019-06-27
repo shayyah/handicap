@@ -22,6 +22,7 @@ exports.addnewroom=function(req,res){
                     res.json(conversation);
 
                     sendnotification(conversation,user,volunteers);
+                    closeRoomAfterTime(id);
                 });
                 }
                 else {
@@ -103,6 +104,28 @@ exports.addnewroom=function(req,res){
     if(err)callback(null);
     callback(result);
   });
+}
+async function closeRoomAfterTime(id)
+{
+  var time=1000*60*60;
+await sleep(time);
+console.log('reeeeeeturn');
+  getRoom(id,function(room){
+      if(room!=null&&room.isDone=='')
+      {
+        room.isDone='no';
+        room.save(function(err){
+            if(err)console.log(err);
+            else console.log('close room done');
+        });
+      }
+  });
+}
+
+function sleep(ms){
+return new Promise(resolve=>{
+    setTimeout(resolve,ms)
+});
 }
   function sendnotification(videoConversation,user,volunteers)
   {
