@@ -51,7 +51,7 @@ exports.addnewroom=function(req,res){
         {
             getRoom(roomid,function(room){
               console.log(room);
-                if(room!=null)
+                if(room!=null&&room.isDone=='')
                 {
 
                     room.isDone='yes';
