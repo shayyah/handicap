@@ -230,7 +230,7 @@ io.on('connection', function (socket){
                     //            console.log('other  '+other.id+ '   '+ other.online+'   '+other.socketId);
                               //  console.log(user.id);
 
-                                console.log("reciver status: "+other.online);
+                              //  console.log("reciver status: "+other.online);
 
                                 if(other.online&&other.id!=user.id){
                                   console.log('dd   '+message.date);
@@ -238,14 +238,14 @@ io.on('connection', function (socket){
                                     console.log(message.appdate);
                                   io.to(other.socketId).emit('newmessage',message);
                                 }
-                                else if(!other.online&&other.id!=user.id)
+                                else if(!other.online&&other.id!=user.id&&other.role=='Blind')
                                 {
                                   console.log(other);
                                 //  console.log(other.id+'   '+other.firebaseId);
                                   if(other.unreadMessages!=null)
                                   {
                                   UserController.addunreadMessage(other,conversation_id,function(newother){
-                                  if(other.firebaseId!=null&&other.firebaseId!='')
+                                  if(newother!=null&&other.firebaseId!=null&&other.firebaseId!='')
                                       sendnotification(conversation_id,user,other,newother.unreadMessages,newother.lastUnreadMessage);
 
                                     });
