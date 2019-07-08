@@ -76,8 +76,8 @@ server.register(require('vision'), function (error) {
     console.log('Failed to load vision.');
   }
 });
-var chatapp=server.select('app');
-var io = require('socket.io')(chatapp.listener);
+//var chatapp=server.select('app');
+var io = require('socket.io')(server.listener);
 
 server.route(Route.endpoints);
 
