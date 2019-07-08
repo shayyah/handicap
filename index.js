@@ -240,6 +240,7 @@ io.on('connection', function (socket){
                                 }
                                 else if(!other.online&&other.id!=user.id)
                                 {
+                                  console.log(other);
                                 //  console.log(other.id+'   '+other.firebaseId);
                                   if(other.unreadMessages!=null)
                                   {
