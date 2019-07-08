@@ -22,8 +22,7 @@ admin = require("firebase-admin");
 
 var app = {};
 app.config = Config;
-var chatapp=server.select('app');
-var io = require('socket.io')(chatapp.listener);
+
 // Configure bodyparser to handle post requests
 //app.use(bodyParser.urlencoded({
 //    extended: true
@@ -77,6 +76,8 @@ server.register(require('vision'), function (error) {
     console.log('Failed to load vision.');
   }
 });
+var chatapp=server.select('app');
+var io = require('socket.io')(chatapp.listener);
 
 server.route(Route.endpoints);
 
