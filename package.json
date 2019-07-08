@@ -2,7 +2,7 @@
   "name": "blind_support",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.4",
@@ -13,7 +13,11 @@
     "mongodb": "^3.1.13",
     "mongoose": "^5.4.11",
     "short-id": "0.1.0-1",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.2.0",
+    "handlebars": "^4.0.5",
+    "hapi": "^12.1.0",
+    "inert": "^3.2.0",
+    "vision": "^4.0.1"
   },
   "engines": {
     "node": "8.12.0"
