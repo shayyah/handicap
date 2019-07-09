@@ -3,12 +3,32 @@ var Common = require('./common');
 
 exports.main = {
   handler: function (request, reply) {
-    var params = Common.getRoomParameters(request, null, null, null);
 
+//console.log('addddddddddddd');
+    var params = Common.getRoomParameters(request, null, null, null);
+  //  reply.view('index.html',params);
     reply.view('index_template', params);
   }
 };
+exports.locations = {
+  handler: function (request, reply) {
 
+
+  //  var params = Common.getRoomParameters(request, null, null, null);
+    reply.view('index.html');
+  //  reply.view('index_template', params);
+  }
+};
+
+exports.addlocations = {
+  handler: function (request, reply) {
+
+
+  //  var params = Common.getRoomParameters(request, null, null, null);
+    reply.view('addLocation.html');
+  //  reply.view('index_template', params);
+  }
+};
 exports.turn = {
   handler: function (request, reply) {
     var getOptions = {

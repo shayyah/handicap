@@ -1,0 +1,173 @@
+
+<html>
+<head> 
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+
+  <style type="text/css">
+      .bold
+      {
+        font-weight: bold;
+      }
+      td,th
+      {
+        text-align:center;
+      }
+  </style>
+
+
+    <style>
+        .centerMarkerSource {
+            position: absolute;
+            background: url('/content/map/markerS.png') no-repeat;
+            top: 50%;
+            left: 50%;
+            z-index: 1;
+            /*fix offset when needed*/
+            margin-left: -15px;
+            margin-top: -41px;
+            /*size of the image*/
+            height: 41px;
+            width: 30px;
+            cursor: pointer;
+        }
+
+        .centerMarkerDestination {
+            position: absolute;
+            background: url('/content/map/markerD.png') no-repeat;
+            top: 50%;
+            left: 50%;
+            z-index: 1;
+            /*fix offset when needed*/
+            margin-left: -15px;
+            margin-top: -41px;
+            /*size of the image*/
+            height: 41px;
+            width: 30px;
+            cursor: pointer;
+        }
+
+        .OnloadAddress {
+            background-color: #fbfbfb;
+        }
+
+        /**For loader **/
+          .loader {
+            margin-left: 33rem;
+             border: 16px solid #f3f3f3;
+             border-radius: 50%;
+             border-top: 16px solid #3498db;
+             width: 120px;
+             height: 120px;
+             -webkit-animation: spin 2s linear infinite; /* Safari */
+             animation: spin 2s linear infinite;
+              }
+
+             /* Safari */
+             @-webkit-keyframes spin {
+              0% { -webkit-transform: rotate(0deg); }
+              100% { -webkit-transform: rotate(360deg); }
+              }
+
+              @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+              }
+
+        /** For Loader End**/
+    </style>
+    
+</head>
+
+<body ng-app="myApp" ng-controller="locationCtrl">
+
+
+  <div class="container mt-5">
+   <!-- <div class="loader"></div>-->
+    <div class="row mb-5">
+    <div class="col-md-3">
+         <label class="bold">Address:</label>
+    <input type="text" class="form-control" id="Address" placeholder="Enter Address" name="Address" required>
+    </div>
+
+   <div class="col-md-3">
+        <label class="bold">Longitude:</label>
+    <input type="text" class="form-control" id="Longitude" placeholder="Enter Longitude" name="Longitude" required>
+   </div>
+
+    <div class="col-md-3">
+      <label class="bold">Latitude:</label>
+    <input type="text" class="form-control" id="Latitude" placeholder="Enter Latitude " name="Latitude" required>  
+    </div>
+
+
+    <div class="col-md-3 mt-4" >
+        <button  class="btn btn-primary mt-1" ng-click="submit()">Submit</button> 
+    </div>
+
+         
+  <div class="mt-5" id="mapSource" style="height:660px;width:100%;"></div>
+  </div>
+ 
+</div>
+
+
+
+ 
+  
+
+<script src="/content/MapOperation.js"></script> 
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBl4Pzqz_A5zt10KpJI4urZPothek-Y2a8&libraries=places&callback=initMap" async defer></script>
+<script type="text/javascript">
+  var app = angular.module('myApp', []);
+app.controller('locationCtrl', function($scope, $rootScope,$http) {
+
+$scope.submit=function()
+{
+
+  $scope.mytext=document.getElementById('Address').value;
+  $scope.Longitude=document.getElementById('Longitude').value;
+  $scope.Latitude=document.getElementById('Latitude').value;
+  $scope.myAddress="";
+  
+  if( $scope.mytext != "" && $scope.Longitude!= "" && $scope.Latitude != "" )
+  {
+      
+       $http({
+            method: 'post',
+            url:'https://almacfufin.herokuapp.com/api/admin/location',
+          data:{
+            address:$scope.myAddress,
+            text:$scope.mytext,
+            longitude:$scope.Longitude,
+            latitude:$scope.Latitude
+               }
+            
+        }).then(function (response) {
+         
+                      console.log( response.data);
+                      $scope.alert=alert("location's Been Added Successfully!");
+
+                  }, function (response) {
+                      console.log( response.data);
+                      $scope.alert=alert("Some Thing's Wrong!");
+             });
+    
+  }
+  else
+  {
+  $scope.alert=alert("Please Choose A location !");
+  }
+
+
+      
+}
+});
+
+
+</script>
+</body>
+</html>

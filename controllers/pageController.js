@@ -8,34 +8,36 @@ var Path = '/app/audio/pages/';
 // Import file stream
 const fs = require('fs');
 // Handle index actions
-exports.index = function (req, res) {
+exports.index = {
+  handler:function (req, res) {
     Page.get(function (err, pages) {
         if (err) {
-            res.json({
+            res({
                 status: "error",
                 message: err,
             });
         }
-        res.json({
+        res({
             status: "success",
             message: "pages retrieved successfully",
             data: pages
         });
     });
+}
 };
-
 // Handle create page actions
-exports.new = function (req, res) {
+exports.new = {
+  handler:function (req, res) {
     var page = new Page();
-    page.page_recording = req.body.page_recording ? req.body.page_recording : page.page_recording;
+    page.page_recording = req.payload.page_recording ? req.payload.page_recording : page.page_recording;
     page.page_state = false;
-    page.page_number = req.body.page_number;
-    page.book = req.body.book;
-    page.volunteer_id = req.body.volunteer_id;
-    page.file_path = req.body.file_path;
+    page.page_number = req.payload.page_number;
+    page.book = req.payload.book;
+    page.volunteer_id = req.payload.volunteer_id;
+    page.file_path = req.payload.file_path;
 
     // handling new bytes stream
-    if(req.body.page_recording) {
+    if(req.payload.page_recording) {
       page.page_state = true;
       if (page.page_number == page.book.page_number) {
         page.book.book_state = "Completed";
@@ -49,40 +51,42 @@ exports.new = function (req, res) {
     // save the page and check for errors
     page.save(function (err) {
         if (err)
-          res.json(err);
-        res.json({
+          res(err);
+        res({
           message: 'New page created!',
           data: page
         });
     });
+}
 };
-
 // Handle view page info
-exports.view = function (req, res) {
+exports.view = {
+  handler:function (req, res) {
     Page.findById(req.params.page_id, function (err, page) {
         if (err)
-            res.send(err);
-        res.json({
+            res(err);
+        res({
             message: 'page details loading..',
             data: page
         });
     });
+}
 };
-
 // Handle update page info
-exports.update = function (req, res) {
+exports.update = {
+  handler:function (req, res) {
 Page.findById(req.params.page_id, function (err, page) {
         if (err)
-            res.send(err);
-        page.page_recording = req.body.page_recording ? req.body.page_recording : page.page_recording;
-        page.page_state = req.body.page_state ? req.body.page_state : page.page_state;
-        page.page_number = req.body.page_number ? req.body.page_number : page.page_number;
-        page.book = req.body.book ? req.body.book : page.book;
-        page.volunteer_id = req.body.volunteer_id ? req.body.volunteer_id : page.volunteer_id;
-        page.file_path = req.body.file_path ? req.body.file_path : page.file_path;
+            res(err);
+        page.page_recording = req.payload.page_recording ? req.payload.page_recording : page.page_recording;
+        page.page_state = req.payload.page_state ? req.payload.page_state : page.page_state;
+        page.page_number = req.payload.page_number ? req.payload.page_number : page.page_number;
+        page.book = req.payload.book ? req.payload.book : page.book;
+        page.volunteer_id = req.payload.volunteer_id ? req.payload.volunteer_id : page.volunteer_id;
+        page.file_path = req.payload.file_path ? req.payload.file_path : page.file_path;
 
         // handling new bytes stream
-        if(req.body.page_recording) {
+        if(req.payload.page_recording) {
           page.page_state = true;
           if (page.page_number === page.book.page_number) {
             page.book.book_state = "Completed";
@@ -96,50 +100,52 @@ Page.findById(req.params.page_id, function (err, page) {
         // save the page and check for errors
         page.save(function (err) {
             if (err)
-                res.json(err);
-            res.json({
+                res(err);
+            res({
                 message: 'page Info updated',
                 data: page
             });
         });
     });
+}
 };
-
 // Handle delete page
-exports.delete = function (req, res) {
+exports.delete = {
+  handler:function (req, res) {
     Page.remove({
         _id: req.params.page_id
     }, function (err, page) {
         if (err)
-          res.send(err);
-        res.json({
+          res(err);
+        res({
           status: "success",
           message: 'page deleted'
         });
     });
+}
 };
-
 // handle book pages
-exports.bookPages = function (req, res) {
+exports.bookPages = {
+  handler:function (req, res) {
   var skipping = Number(req.query.skipping);
   if (req.query.skipping < 1) {
     skipping = 0;
   }
   Page.find({'book._id' : req.params.book_id, 'page_state' : true}, null, {skip : skipping}, (err, pages) => {
     if (err) {
-        res.json({
+        res({
             status: "error",
             message: err,
         });
     }
-    res.json({
+    res({
         status: "success",
         message: "book pages retrieved successfully",
         data: pages
     });
   }).sort({page_number : 1}).limit(5);
+}
 };
-
 var updateBookState = function(book_id, book_state) {
   Book.findById(book_id, (err, book) => {
     book.book_state = book_state;

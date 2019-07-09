@@ -12,7 +12,8 @@ var UserController =require('../controllers/userController');
 var path="C:/Users/salim-s/Desktop/blind support/sound/";
 
 
-exports.getlocations=function(req,res){
+exports.getlocations={
+  handler:function(req,res){
 
 
 //  GetAllPublicLocations(function(locations){
@@ -47,26 +48,28 @@ exports.getlocations=function(req,res){
                                  if(deletedlocations!=null)
                                  {
                                      UserController.ModifyUserDate(MyUser.id,new Date());
-                                     res.json({locations:locations,deletedlocations:deletedlocations});
+                                     res({locations:locations,deletedlocations:deletedlocations});
 
                                 }
                                  else {
-                                   res.json({message:'error'});
+                                   res({message:'error'});
                                  }
                              });
                          }
-                         else res.json({message:'error'});
+                         else res({message:'error'});
                 });
              }
-             else res.json({message:'error'});
+             else res({message:'error'});
          });
+}
 };
-exports.addlocation=function(req,res){
-        var id=req.body.id;
-        var longitude=parseFloat(req.body.longitude);
-        var latitude=parseFloat(req.body.latitude);
-        var address=req.body.address;
-        var text=req.body.text;
+exports.addlocation={
+  handler:function(req,res){
+        var id=req.payload.id;
+        var longitude=parseFloat(req.payload.longitude);
+        var latitude=parseFloat(req.payload.latitude);
+        var address=req.payload.address;
+        var text=req.payload.text;
         var ispublic=false;
         console.log(address);
         UserController.getUser(id,function(MyUser){
@@ -76,66 +79,74 @@ exports.addlocation=function(req,res){
               CreateLocationAndAddToDataBase(id,longitude,latitude,address,text,ispublic,function(myLocation){
               if(myLocation!=null)
               {
-                res.json(myLocation);
+                res(myLocation);
                 UserController.Updatelocation_count(MyUser,1);
               }
-              else res.json({message:'error'});
+              else res({message:'error'});
               });
           }
           else {
           //  res.json(MyUser);
 
-            res.json({message:'cant add location'});
+          res({message:'cant add location'});
           }
       });
+}
 };
-exports.getmylocations=function(req,res){
+exports.getmylocations={
+  handler:function(req,res){
     var id=req.query.id;
     UserController.getUser(id,function(myPlayer){
         GetMyLocations(id,function(result){
             if(result!=null)
             {
-              res.json({'myLocations':result});
+              res({'myLocations':result});
             }
-            else res.json({message:'error'});
+            else res({message:'error'});
         });
     });
+}
 };
-exports.addpubliclocation=function(req,res){
+exports.addpubliclocation={
+  handler:function(req,res){
         var id='';
-        var longitude=parseFloat(req.body.longitude);
-        var latitude=parseFloat(req.body.latitude);
-        var address=req.body.address;
+        var longitude=parseFloat(req.payload.longitude);
+        var latitude=parseFloat(req.payload.latitude);
+        var address=req.payload.address;
         var ispublic=true;
 
         console.log('addpublic  '+address);
-        var text=req.body.text;
+        var text=req.payload.text;
         console.log(address);
     //    UserController.getUser(req.body.id,function(MyUser){
 
               CreateLocationAndAddToDataBase(id,longitude,latitude,address,text,ispublic,function(myLocation){
               if(myLocation!=null)
               {
-                res.json(myLocation);
+                res(myLocation);
               }
-              else res.json({message:'error'});
+              else res({message:'error'});
               });
 
   //    });
+}
 };
-exports.deletelocation=function(req,res){
-  DeleteLocation(req.body.id,function(location){
+exports.deletelocation={
+  handler:function(req,res){
+  DeleteLocation(req.payload.id,function(location){
     if(location!=null)
     {
-      res.json(location);
+      res(location);
     }
-    else res.json({message:'error'});
+    else res({message:'error'});
   });
 }
-exports.changestate=function(req,res){
+};
+exports.changestate={
+  handler:function(req,res){
   console.log("puuut");
-          var id=req.body.id;
-          var state=req.body.state;
+          var id=req.payload.id;
+          var state=req.payload.state;
             console.log(state);
           if(state=='true')
           {
@@ -143,10 +154,10 @@ exports.changestate=function(req,res){
               ApproveLocation(id,function(location){
                 if(location!=null)
                 {
-                  res.json(location);
+                  res(location);
                 }
                 else {
-                  res.json({message:'error'});
+                  res({message:'error'});
                 }
               });
           }
@@ -154,7 +165,7 @@ exports.changestate=function(req,res){
               DeleteLocation(id,function(location){
                 if(location!=null)
                 {
-                  res.json(location);
+                  res(location);
                   UserController.getUser(location.user_id,function(MyUser){
                     if(MyUser!=null)
                       UserController.Updatelocation_count(MyUser,-1);
@@ -162,12 +173,14 @@ exports.changestate=function(req,res){
 
                 }
                 else {
-                  res.json({message:'error'});
+                  res({message:'error'});
                 }
               });
           }
-        };
-exports.getpubliclocations=function(req,res)
+        }
+      };
+exports.getpubliclocations={
+  handler:function(req,res)
 {
   //var id=req.query.id;
 //  UserController.getUser(id,function(MyUser){
@@ -176,14 +189,16 @@ exports.getpubliclocations=function(req,res)
   //    {
           GetAllPublicLocations(function(locations){
             if(locations!=null)
-              res.json({'publicLocations':locations});
-            else res.json({message:'error'});
+              res({'publicLocations':locations});
+            else res({message:'error'});
           });
 //      }
   //    else res.json({message:'error'});
   //  });
 }
-exports.getnearbylocation=function(req,res){
+};
+exports.getnearbylocation={
+  handler:function(req,res){
   var id=req.query.id;
   var UserLocation={
     longitude:req.query.longitude,
@@ -195,13 +210,14 @@ exports.getnearbylocation=function(req,res){
       {
           GetNearbyUnapprovedLocations(UserLocation,function(locations){
             if(locations!=null)
-              res.json({nearbyLocations:locations});
-            else res.json({message:'error'});
+              res({nearbyLocations:locations});
+            else res({message:'error'});
           });
       }
-      else res.json({message:'error'});
+      else res({message:'error'});
     });
 }
+};
 function GetMyLocations (id,callback){
   var query ={'user_id':id,'isPublic':false};
   Location.find(query,function(err,res){

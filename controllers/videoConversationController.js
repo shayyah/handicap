@@ -3,10 +3,11 @@ var UserController =require('../controllers/userController');
 var VideoConversation = require('../models/videoConversationModel.js');
 
 
-exports.addnewroom=function(req,res){
+exports.addnewroom={
+  handler:function(req,res){
     console.log('add new room');
-      var id=req.body.roomid;
-      var userid=req.body.userid;
+      var id=req.payload.roomid;
+      var userid=req.payload.userid;
 
 
       getRoom(id,function(room){
@@ -19,31 +20,33 @@ exports.addnewroom=function(req,res){
               UserController.getAllVolunteers(function(volunteers){
                 if(volunteers!=null){
                 CreateVideoConversation(id,userid,function(conversation){
-                    res.json(conversation);
+                    res(conversation);
 
                     sendnotification(conversation,user,volunteers);
                     closeRoomAfterTime(id);
                 });
                 }
                 else {
-                    res.json({message:'error'});
+                    res({message:'error'});
                 }
               });
 
         }
         else {
-            res.json({message:'error'});
+            res({message:'error'});
         }
         });
       }
       else{
-        res.json({message:'error'});
+        res({message:'error'});
       }
     });
   }
-  exports.answercall=function(req,res){
-    var volunteerid=req.body.volunteerid;
-    var roomid= req.body.roomid;
+};
+  exports.answercall={
+    handler:function(req,res){
+    var volunteerid=req.payload.volunteerid;
+    var roomid= req.payload.roomid;
   //  var action=req.body.action;
     UserController.getUser(volunteerid,function(volunteer){
 
@@ -58,38 +61,41 @@ exports.addnewroom=function(req,res){
                     room.volunteerid=volunteerid;
                     room.save(function(err){
                       if(err){
-                        res.json({message:'error'});
+                        res({message:'error'});
                       }
                       else{
-                        res.json({message:'done'});
+                        res({message:'done'});
                       }
                     });
 
                 }
                 else {
-                    res.json({message:'error'});
+                    res({message:'error'});
                 }
             });
         }
         else {
-            res.json({message:'error'});
+            res({message:'error'});
         }
     });
   }
-  exports.getAllUnansweredCall=function(req,res){
+};
+  exports.getAllUnansweredCall={
+    handler:function(req,res){
     var volunteerid=req.query.id;
     UserController.getUser(volunteerid,function(volunteer){
         if(volunteer!=null&&volunteer.role==UserRole.Volunteer)
         {
             getUnansweredCall(function(calls){
-              res.json({calls:calls});
+              res({calls:calls});
             });
         }
         else{
-            res.json({message:'error'});
+            res({message:'error'});
         }
   });
 }
+};
   function getRoom(id,callback){
     VideoConversation.findOne({roomid:id},function(err,user){
         if(err)callback(null);

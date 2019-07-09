@@ -1,0 +1,271 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <style type="text/css">
+      .bold
+      {
+        font-weight: bold;
+      }
+      td,th
+      {
+        text-align:center;
+      }
+  </style>
+</head>
+
+<body ng-app="myApp" ng-controller="locationCtrl">
+   
+ 
+  <div class="container mt-5">
+   
+     <div class="row mb-5">
+      <div class="col-md-6">
+       <a href="addLocation" ><button class="btn btn-primary mt-4" > Add New Location </button></a>
+      </div>
+        <div class="col-md-6 mt-4">
+       <h4 style="font-weight:bold;float: right;" > Map Satellite</h4>
+        </div>
+  </div>
+
+    <div class="row mb-5">
+  <div class="mt-5" id="map1" style="height:670px;width:100%;"></div>
+  </div>
+<!-- map-->
+
+<!--<div class="table-responsive mt-5">
+<table class="table table-hover table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Text</th>
+        <th>Longitude</th>
+        <th>Latitude</th>
+        <th>Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeate="i in locationlist">
+        <td>{{i.text}}</td>
+        <td>{{i.longitude}}</td>
+        <td>{{i.latitude}}</td>
+          <td>{{i.address}}</td>
+      </tr>
+  
+    </tbody>
+  </table>
+</div>-->
+
+
+</div>
+
+
+
+ 
+ 
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('locationCtrl', function($scope, $rootScope,$http) {
+
+/** Get all Location**/
+ $http({
+            method: 'GET',
+            url:'https://almacfufin.herokuapp.com/api/admin/location',
+       
+             
+             headers: {'Content-Type': 'application/json'
+     
+    }
+            
+        }).then(function (response) {
+          console.log(response.data);
+          $scope.locationlist=response.data.publicLocations;
+         
+ 
+            $scope.FillData(true);
+            
+            }, function (response) { 
+        });
+      
+/** Get all Location End**/
+
+$scope.send=function(a,b,c)
+{
+/*** Test **/
+/**Test End**/
+/**my json**/
+    var obj = angular.copy({text:a,latitude:b,longitude:c,address:""});
+
+
+
+    $scope.Arr.push(obj);
+console.log($scope.Arr);
+$scope.publicLocations = JSON.stringify($scope.Arr);
+console.log($scope.publicLocations );
+/**my json**/
+/** Request **/
+    $http({
+        method: 'post',
+        url:'https://almacfufin.herokuapp.com/api/admin/location',
+        data:$scope.publicLocations,
+         
+        headers: {'Content-Type': 'application/json'}
+            
+    }).then(function (response) {
+      console.log(response.data);
+      /** Get All Again**/
+   $http({
+        method: 'GET',
+        url:'https://almacfufin.herokuapp.com/api/admin/location',
+   
+         
+        headers: {'Content-Type': 'application/json'}
+            
+        }).then(function (response) {
+          console.log(response.data);
+          $scope.locationlist=response.data.publicLocations;
+          
+                        console.log($scope.locationlist);
+                }, function (response) {
+            console.log(response.data);
+        });
+          /** Get All Again End**/
+                    }, function (response) {
+                console.log(response.data);
+        });
+/** Request End **/
+}
+
+
+
+$scope.clearCash=function()
+{
+         $scope.Address="";
+         $scope.Latitude=""; 
+         $scope.Longitude=""; 
+}
+/***Their Code***/
+ $scope.FillData=function(centerMap)
+ {
+    $scope.markers = [];
+    var Dubai = { lat:33.2048, lng: 36.5555 };
+ 
+
+     
+      var map = new google.maps.Map(document.getElementById('map1'), {
+          zoom: 10,
+          center: Dubai,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+      }); 
+
+    //Center two map at user location
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            map.setCenter(pos);  
+        },
+        function () {}, { timeout: 5000 }); 
+    }
+    var prev_infowindow = false;
+    for(i=0; i<$scope.locationlist.length; i++)
+    {
+        var markerlatLng = new google.maps.LatLng($scope.locationlist[i].latitude, $scope.locationlist[i].longitude); 
+        var name = $scope.locationlist[i].text;
+        var content = '<b>Title: </b>' + $scope.locationlist[i].text +
+        '<input type="button" value="Delete" class="btn btn-primary deleteButton ml-2" id="'+$scope.locationlist[i]
+        .id+'">' ;
+        var marker = new google.maps.Marker({
+            position: markerlatLng,
+            title: name,
+            map: map
+        });
+        $scope.markers.push(marker);
+        var infowindow = new google.maps.InfoWindow({
+            content: content
+        });
+        google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){
+            return function () {
+                if (prev_infowindow) {
+                    prev_infowindow.close();
+                }
+                prev_infowindow = infowindow;
+                infowindow.setContent(content);
+                infowindow.open(map,marker);
+            };
+        })(marker,content,infowindow));
+    }
+    // Add a marker clusterer to manage the markers.
+    var markerCluster = new MarkerClusterer(map, $scope.markers,
+     { imagePath: '/content/map/m'  });
+ }
+/**Their Code End**/
+
+$scope.deleteMe=function(x)
+{
+console.log('hello people!');
+}
+
+
+$('body').on('click', '.deleteButton', function() {
+     $scope.myId=this.id;
+     console.log($scope.myId)
+ /*   alert(this.id);*/
+
+       $http({
+            method: 'put',
+            url:'https://almacfufin.herokuapp.com/api/admin/location',
+          data:{id: $scope.myId}
+            
+        }).then(function (response) {
+         
+                      console.log( response.data);
+                      //$scope.alert=alert("location's Been Deleted Successfully!");
+
+                      $scope.oldLocationlist = $scope.locationlist;
+
+                      $scope.locationlist = [];
+
+                      for(i=0; i<$scope.oldLocationlist.length; i++)
+                      {
+                          if($scope.oldLocationlist[i].id != $scope.myId)
+                          {
+                            $scope.locationlist.push($scope.oldLocationlist[i]); 
+                          }
+                      }
+ 
+
+                      $scope.FillData(false);
+
+                  }, function (response) {
+                      console.log( response.data);
+                      $scope.alert=alert("Some Thing's Wrong!");
+             });
+    
+
+});
+
+});
+
+
+</script> 
+
+<script type="text/javascript">
+  
+
+
+</script>
+
+<script src="/content/markerclusterer.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBl4Pzqz_A5zt10KpJI4urZPothek-Y2a8&callback=initMap"
+            async defer></script>
+
+
+</body>
+</html>

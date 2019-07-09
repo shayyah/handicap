@@ -1,5 +1,7 @@
 // api-routes.js
 // Initialize express router
+
+
 let router = require('express').Router();
 // Set default API response
 router.get('/', function (req, res) {
@@ -15,7 +17,10 @@ router.get('/', function (req, res) {
 });
 
 // Import order controller
+
+/*
 var orderController = require('./controllers/orderController');
+
 // order routes
 router.route('/orders')
     .get(orderController.index)
@@ -85,3 +90,4 @@ router.route('/call')
 
 // Export API routes
 module.exports = router;
+*/

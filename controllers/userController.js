@@ -21,7 +21,8 @@ UserRole={
 
 
 
-exports.login = function (req, res) {
+exports.login = {
+  handler:function (req, res) {
   console.log('login');
   var phone=req.query.phone;
       var password=req.query.password;
@@ -29,40 +30,42 @@ exports.login = function (req, res) {
         if(MyUser!=null)
         {
             if(MyUser.password!=password)
-              res.json({message:'wrong password or phone'});
+              res({message:'wrong password or phone'});
             else {
               //MyUser.date=convertDate(MyUser.date);
-              res.json(MyUser);
+              res(MyUser);
             }
         }
-        else res.json({message:'error'});
+        else res({message:'error'});
       });
 
+}
 };
-exports.register = function (req, res) {
+exports.register = {
+  handler:function (req, res) {
   console.log('regggggggggg');
-  var name=req.body.name;
-      var phone=req.body.phone;
-      var role=req.body.role;
+  var name=req.payload.name;
+      var phone=req.payload.phone;
+      var role=req.payload.role;
 //      var token=req.body.token;
-      var password=req.body.password;
-      var sound=req.body.sound;
+      var password=req.payload.password;
+      var sound=req.payload.sound;
         var dateModified=new Date("2019-01-01T00:00:00.123Z");
       GetUserByPhone(phone,function(user){
         if(user==null&&UserRole[role])
         {
             CreateUserAndAddToDataBase(name,phone,password,sound,dateModified,role,function(myUser){
             if(myUser!=null)
-              res.json(myUser);
-            else res.json({message:'error'});
+              res(myUser);
+            else res({message:'error'});
           });
         }
         else
         {
           if(user!=null)
-            res.json({message:'phone already exist'});
+            res({message:'phone already exist'});
           else {
-            res.json({message:'wrong role'});
+            res({message:'wrong role'});
 
           }
         }
@@ -71,10 +74,12 @@ exports.register = function (req, res) {
     //  console.log('name   '+ req.body.name);
 
   }
-  exports.settoken=function(req,res){
+};
+  exports.settoken={
+    handler:function(req,res){
     console.log('settoken');
-      var id=req.body.id;
-      var token=req.body.firebaseId;
+      var id=req.payload.id;
+      var token=req.payload.firebaseId;
       console.log(id+'    '+token);
       GetUser(id,function(user){
         if(user!=null)
@@ -82,16 +87,17 @@ exports.register = function (req, res) {
             setFirebaseToken(user,token,function(newUser) {
               console.log(JSON.stringify(newUser));
                 if(newUser==null)
-                    res.json({message:'error'});
-                else res.json(newUser);
+                    res({message:'error'});
+                else res(newUser);
             });
         }
         else {
-            res.json({message:'error'});
+            res({message:'error'});
         }
       });
 
   }
+};
 function CreateUserAndAddToDataBase(rusername,ruserphone,ruserpassword,rsound,rdate,rrole,callback)
     {
       var user=new User();
