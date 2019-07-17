@@ -4,7 +4,8 @@ var Https = require('https');
 var Config = require('../config');
 var Common = require('./common');
 var Rooms = require('../data/rooms');
-
+var UserController =require('../controllers/userController');
+var VideoController =require('../controllers/videoConversationController');
 var rooms = new Rooms();
 
 var addClientToRoom = function (request, roomId, clientId, isLoopback, callback) {
@@ -164,56 +165,89 @@ var removeClientFromRoom = function (host, roomId, clientId, callback) {
 exports.main = {
   handler: function (request, reply) {
     var roomId = request.params.roomId;
-    var key = Common.getCacheKeyForRoom(request.headers['host'], roomId);
+    var userId=request.params.userId;
+    UserController.getUser(userId,function(user){
+      if(user!=null&& user.role==UserRole.Blind||user.role==UserRole.Volunteer)
+      {
 
-    rooms.get(key, function (error, room) {
-      if (room) {
-        console.log('Room ' + roomId + ' has state ' + room.toString());
+        VideoController.getRoom(roomId,function(myRoom){
+            if(myRoom!=null && ((user.role==UserRole.Blind&&myRoom.userid==user.id)||(user.role==UserRole.Volunteer&&myRoom.volunteerid==user.id))
+              && myRoom.isDone!='no'&&myRoom.isDone!='ended')
+              {
+                var key = Common.getCacheKeyForRoom(request.headers['host'], roomId);
 
-        if (room.getOccupancy() >= 2) {
-          console.log('Room ' + roomId + ' is full');
-          reply.view('full_template', {});
+                rooms.get(key, function (error, room) {
+                  if (room) {
+                    console.log('Room ' + roomId + ' has state ' + room.toString());
 
-          return;
-        }
+                    if (room.getOccupancy() >= 2) {
+                      console.log('Room ' + roomId + ' is full');
+                      reply.view('full_template', {});
+
+                      return;
+                    }
+                  }
+                  VideoController.sendnotification(myRoom,user);
+                  var params = Common.getRoomParameters(request, roomId, null, null);
+                  reply.view('index_template', params);
+                });
+
+              }
+              else reply('').code(404);
+
+        });
       }
-
-      var params = Common.getRoomParameters(request, roomId, null, null);
-      reply.view('index_template', params);
+      else reply('').code(404);
     });
+
   }
 };
 
 exports.join = {
   handler: function (request, reply) {
     var roomId = request.params.roomId;
-    var clientId = Common.generateRandom(8);
+    var clientId = request.params.clientId;//Common.generateRandom(8);
     var isLoopback = request.params.debug == 'loopback';
     var response = null;
+    UserController.getRoom(roomId,function(myRoom){
+        if(myRoom!=null&&myRoom.isDone!='no'&&myRoom.isDone!='ended')
+        {
+          addClientToRoom(request, roomId, clientId, isLoopback, function(error, result) {
+            if (error) {
+              console.error('Error adding client to room: ' + error + ', room_state=' + result.room_state);
+              response = {
+                result: error,
+                params: result
+              };
+              reply(JSON.stringify(response));
 
-    addClientToRoom(request, roomId, clientId, isLoopback, function(error, result) {
-      if (error) {
-        console.error('Error adding client to room: ' + error + ', room_state=' + result.room_state);
-        response = {
-          result: error,
-          params: result
-        };
-        reply(JSON.stringify(response));
+              return;
+            }
 
-        return;
-      }
+            var params = Common.getRoomParameters(request, roomId, clientId, result.is_initiator);
+            params.messages = result.messages;
+            response = {
+              result: 'SUCCESS',
+              params: params
+            };
+            reply(JSON.stringify(response));
 
-      var params = Common.getRoomParameters(request, roomId, clientId, result.is_initiator);
-      params.messages = result.messages;
-      response = {
-        result: 'SUCCESS',
-        params: params
-      };
-      reply(JSON.stringify(response));
+            console.log('User ' + clientId + ' joined room ' + roomId);
+            console.log('Room ' + roomId + ' has state ' + result.room_state);
+          });
+        }
+        else {
+          response = {
+            result: error,
+            params: result
+          };
+          reply(JSON.stringify(response));
 
-      console.log('User ' + clientId + ' joined room ' + roomId);
-      console.log('Room ' + roomId + ' has state ' + result.room_state);
+          return;
+        }
+
     });
+
   }
 };
 
@@ -275,7 +309,9 @@ exports.leave = {
   handler: function (request, reply) {
     var roomId = request.params.roomId;
     var clientId = request.params.clientId;
-
+    VideoController.endCall(roomId,function(myRoom){
+        console.log('leave room done  '+myRoom);
+    });
     removeClientFromRoom(request.headers['host'], roomId, clientId, function (error, result) {
       if (error) {
         console.log('Room ' + roomId + ' has state ' + result.room_state);

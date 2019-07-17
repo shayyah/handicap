@@ -10,26 +10,25 @@ exports.addnewroom={
       var userid=req.payload.userid;
 
 
-      getRoom(id,function(room){
+      GetRoom(id,function(room){
 
         if(room==null){
       UserController.getUser(userid,function(user){
         console.log(user);
         if(user!=null&&user.role==UserRole.Blind)
         {
-              UserController.getAllVolunteers(function(volunteers){
-                if(volunteers!=null){
+
                 CreateVideoConversation(id,userid,function(conversation){
                     res(conversation);
 
-                    sendnotification(conversation,user,volunteers);
+                  //  sendnotification(conversation,user,volunteers);
                     closeRoomAfterTime(id);
                 });
-                }
+
                 else {
                     res({message:'error'});
                 }
-              });
+
 
         }
         else {
@@ -52,7 +51,7 @@ exports.addnewroom={
 
         if(volunteer!=null&&volunteer.role!=null&&volunteer.role==UserRole.Volunteer)
         {
-            getRoom(roomid,function(room){
+            GetRoom(roomid,function(room){
               console.log(room);
                 if(room!=null&&room.isDone=='')
                 {
@@ -80,6 +79,7 @@ exports.addnewroom={
     });
   }
 };
+
   exports.getAllUnansweredCall={
     handler:function(req,res){
     var volunteerid=req.query.id;
@@ -96,11 +96,33 @@ exports.addnewroom={
   });
 }
 };
-  function getRoom(id,callback){
+  function GetRoom(id,callback){
     VideoConversation.findOne({roomid:id},function(err,user){
         if(err)callback(null);
         callback(user);
     });
+  }
+  exports.getRoom = function(id,callback){
+    VideoConversation.findOne({roomid:id},function(err,user){
+        if(err)callback(null);
+        callback(user);
+    });
+  }
+  exports.endCall=function(roomid,callback)
+  {
+    GetRoom(roomid,function(room){
+          if(room!=null)
+          {
+              room.isDone='ended';
+              room.save(function(err){
+                  if(err)callback(null);
+                  else callback(room);
+              });
+          }
+          else {
+            callback(null);
+          }
+      });
   }
   function getUnansweredCall(callback)
   {
@@ -113,10 +135,10 @@ exports.addnewroom={
 }
 async function closeRoomAfterTime(id)
 {
-  var time=1000*60*60;
+  var time=1000*60*10;
 await sleep(time);
 console.log('reeeeeeturn');
-  getRoom(id,function(room){
+  GetRoom(id,function(room){
       if(room!=null&&room.isDone=='')
       {
         room.isDone='no';
@@ -133,8 +155,9 @@ return new Promise(resolve=>{
     setTimeout(resolve,ms)
 });
 }
-  function sendnotification(videoConversation,user,volunteers)
+  exports.sendnotification =function(videoConversation,user)
   {
+
     console.log('send notification');
     var mes= "You have new video call";
     var notification = {
@@ -155,19 +178,22 @@ return new Promise(resolve=>{
     var options = {
       priority: "high"
     };
-    volunteers.forEach(function(volunteer){
-      var token=volunteer.firebaseId;
+    UserController.getAllVolunteers(function(volunteers){
+      if(volunteers!=null){
+          volunteers.forEach(function(volunteer){
+            var token=volunteer.firebaseId;
 
-      //console.log('token   '+token);
-      admin.messaging().sendToDevice(token, notification, options)
-        .then(function(response) {
-          console.log("Successfully sent message:", response);
-        })
-        .catch(function(error) {
-          console.log("Error sending message:", error);
-        });
-    });
-
+            //console.log('token   '+token);
+            admin.messaging().sendToDevice(token, notification, options)
+              .then(function(response) {
+                console.log("Successfully sent message:", response);
+              })
+              .catch(function(error) {
+                console.log("Error sending message:", error);
+              });
+          });
+        }
+      });
   }
 
   function CreateVideoConversation(vroomid,vuserid,callback)

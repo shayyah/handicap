@@ -45,9 +45,9 @@ exports.endpoints = [
   /*{ method: 'GET', path: '/', config: Index.main },*/
   { method: 'GET', path: '/admin/locations', config: Index.locations },
   { method: 'GET', path: '/admin/addLocation', config: Index.addlocations },
-  { method: 'POST', path: '/join/{roomId}', config: Room.join },
+  { method: 'POST', path: '/join/{roomId}/{clientId}', config: Room.join },
   { method: 'POST', path: '/message/{roomId}/{clientId}', config: Room.message },
-  { method: 'GET', path: '/r/{roomId}', config: Room.main },
+  { method: 'GET', path: '/r/{roomId}/{userId}', config: Room.main },
   { method: 'POST', path: '/leave/{roomId}/{clientId}', config: Room.leave },
   { method: 'POST', path: '/turn', config: Index.turn },
   { method: 'GET', path: '/{param*}', handler: {
