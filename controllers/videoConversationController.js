@@ -25,10 +25,6 @@ exports.addnewroom={
                     closeRoomAfterTime(id);
                 });
 
-                else {
-                    res({message:'error'});
-                }
-
 
         }
         else {
