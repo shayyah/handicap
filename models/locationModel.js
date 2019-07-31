@@ -39,6 +39,10 @@ var locationSchema=mongoose.Schema({
   datemodified:{
       type:Date,
       require:false
+  },
+  city:{
+    type:String,
+    require:false
   }
 
 });

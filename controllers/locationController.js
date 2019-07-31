@@ -1,6 +1,7 @@
 var shortid = require('short-id');
 var fs=require('fs');
 Location = require('../models/locationModel.js');
+var Citytime =require('../models/citytimeModel.js');
 var UserController =require('../controllers/userController');
 //var dbo;
 //var MongoClient = require('mongodb').MongoClient;
@@ -13,7 +14,7 @@ var path="C:/Users/salim-s/Desktop/blind support/sound/";
 
 
 exports.getlocations={
-  handler:function(req,res){
+  handler: function(req,res){
 
 
 //  GetAllPublicLocations(function(locations){
@@ -27,7 +28,11 @@ exports.getlocations={
            longitude:req.query.longitude,
            latitude:req.query.latitude
          };
-
+         var city=req.query.city;
+         if(city==null)
+         {
+           city='Damascus';
+         }
          console.log(UserId);
          UserController.getUser(UserId,function(MyUser){
 
@@ -37,27 +42,45 @@ exports.getlocations={
              if(MyUser!=null)
              {
 
+                GetCityTime(city,MyUser.id,function(citytime){
 
-                     GetLocationByUserLocation(UserLocation,MyUser,function(locations){
 
-                       console.log('locations' + locations.length);
-                         if(locations!=null)
-                         {
-                             GetDeletedLocations(UserLocation,MyUser,function(deletedlocations){
+                     var date=new Date("2019-01-01T00:00:00.123Z");
+                      if(citytime!=null)
+                      {
+                          date=citytime.last_update;
+                          UpdateCityTime(city,new Date(),MyUser.id,function(newcitytime){
+                              console.log('add new citytime  '+newcitytime);
+                          });
+                      }
+                      else {
+                        AddnewCityTime(city,new Date(),MyUser.id,function(newcitytime){
+                            console.log('add new citytime  '+newcitytime);
+                        });
+                      }
+                      GetLocationByUserLocation(UserLocation,MyUser,date,function(locations){
 
-                                 if(deletedlocations!=null)
-                                 {
-                                     UserController.ModifyUserDate(MyUser.id,new Date());
-                                     res({locations:locations,deletedlocations:deletedlocations});
+                        console.log('locations' + locations.length);
+                          if(locations!=null)
+                          {
+                              GetDeletedLocations(UserLocation,MyUser,date,function(deletedlocations){
 
-                                }
-                                 else {
-                                   res({message:'error'});
+                                  if(deletedlocations!=null)
+                                  {
+                                    //  UserController.ModifyUserDate(MyUser.id,new Date());
+                                      res({locations:locations,deletedlocations:deletedlocations});
+
                                  }
-                             });
-                         }
-                         else res({message:'error'});
-                });
+                                  else {
+                                    res({message:'error'});
+                                  }
+                              });
+                          }
+                          else res({message:'error'});
+                        });
+
+                  });
+
              }
              else res({message:'error'});
          });
@@ -70,13 +93,15 @@ exports.addlocation={
         var latitude=parseFloat(req.payload.latitude);
         var address=req.payload.address;
         var text=req.payload.text;
+        var city=req.payload.city;
+
         var ispublic=false;
         console.log(address);
         UserController.getUser(id,function(MyUser){
 
           if(MyUser!=null&&MyUser.role==UserRole.Blind&&MyUser.location_count<20)
             {
-              CreateLocationAndAddToDataBase(id,longitude,latitude,address,text,ispublic,function(myLocation){
+              CreateLocationAndAddToDataBase(id,longitude,latitude,address,text,ispublic,city,function(myLocation){
               if(myLocation!=null)
               {
                 res(myLocation);
@@ -114,13 +139,13 @@ exports.addpubliclocation={
         var latitude=parseFloat(req.payload.latitude);
         var address=req.payload.address;
         var ispublic=true;
-
+        var city=req.payload.city;
         console.log('addpublic  '+address);
         var text=req.payload.text;
         console.log(address);
     //    UserController.getUser(req.body.id,function(MyUser){
 
-              CreateLocationAndAddToDataBase(id,longitude,latitude,address,text,ispublic,function(myLocation){
+              CreateLocationAndAddToDataBase(id,longitude,latitude,address,text,ispublic,city,function(myLocation){
               if(myLocation!=null)
               {
                 res(myLocation);
@@ -218,6 +243,41 @@ exports.getnearbylocation={
     });
 }
 };
+function AddnewCityTime(city,time,userid,callback)
+{
+
+    var citytime=new Citytime();
+    citytime.id=shortid.generate();
+    citytime.user_id=userid;
+    citytime.last_update=time;
+    citytime.city=city;
+    citytime.save(function(err){
+      if(err)callback(null);
+      else callback(citytime);
+    });
+
+
+
+}
+function UpdateCityTime(city,time,userid,callback)
+{
+  city.last_update=time;
+  city.save(function(err){
+      if(err)callback(err);
+      else callback(city);
+  });
+}
+function GetCityTime(cityName,userId,callback)
+{
+
+    var query={'user_id':userId,'city':cityName};
+    Citytime.findOne(query,function(err,res){
+        if(err)callback(null);
+        else callback(res);
+    });
+
+
+}
 function GetMyLocations (id,callback){
   var query ={'user_id':id,'isPublic':false};
   Location.find(query,function(err,res){
@@ -261,7 +321,7 @@ function GetAllLocations(callback)
             else callback(null);
         });
       }
-      function CreateLocationAndAddToDataBase(rid,rlongitude,rlatitude,raddress,text,ispublic,callback)
+      function CreateLocationAndAddToDataBase(rid,rlongitude,rlatitude,raddress,text,ispublic,rcity,callback)
       {
 
   //      console.log(JSON.stringify(UserController));
@@ -270,6 +330,7 @@ function GetAllLocations(callback)
           location.user_id=rid;
           location.longitude=rlongitude;
           location.latitude=rlatitude;
+          location.city=rcity;
       //    location.address="";
           location.text=text;
           location.approved=true;
@@ -304,16 +365,16 @@ function GetAllLocations(callback)
   //          callback(result);
   //      });
       }
-      function GetLocationByUserLocation(myLocation,user,callback)
+      function GetLocationByUserLocation(myLocation,user,date,callback)
       {
-        console.log('date   '+user.datemodified);
+        console.log('date   '+date);
         var minLongitude=parseFloat(myLocation.longitude-0.2);
         var maxLongitude=parseFloat(myLocation.longitude)+0.2;
         var minlatitude=parseFloat(myLocation.latitude-0.2);
         var maxlatitude=parseFloat(myLocation.latitude)+0.2;
         var query ={'longitude':{$gt:minLongitude,$lt:maxLongitude},
                 'latitude':{$gt:minlatitude,$lt:maxlatitude},'deleted':false,'isPublic':true,
-              'datemodified':{$gt:user.datemodified}
+              'datemodified':{$gt:date}
             };
         console.log(query);
         Location.find(query,function(err,result){
@@ -351,14 +412,14 @@ function GetAllLocations(callback)
 //            callback(result);
 //        });
       }
-      function GetDeletedLocations(myLocation,user,callback)
+      function GetDeletedLocations(myLocation,user,date,callback)
       {
         var minLongitude=parseFloat(myLocation.longitude-0.2);
         var maxLongitude=parseFloat(myLocation.longitude)+0.2;
         var minlatitude=parseFloat(myLocation.latitude-0.2);
         var maxlatitude=parseFloat(myLocation.latitude)+0.2;
         var query ={'longitude':{$gt:minLongitude,$lt:maxLongitude},
-                'latitude':{$gt:minlatitude,$lt:maxlatitude},'deleted':true,'isPublic':true,'datemodified':{$gt:user.datemodified}
+                'latitude':{$gt:minlatitude,$lt:maxlatitude},'deleted':true,'isPublic':true,'datemodified':{$gt:date}
               };
         Location.find(query,function(err,result){
           if(err)callback(null);
