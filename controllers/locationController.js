@@ -29,7 +29,7 @@ exports.getlocations={
            latitude:req.query.latitude
          };
          var city=req.query.city;
-         if(city==null)
+         if(city==null||city=='')
          {
            city='Damascus';
          }
@@ -140,6 +140,10 @@ exports.addpubliclocation={
         var address=req.payload.address;
         var ispublic=true;
         var city=req.payload.city;
+        if(city==null||city=='')
+        {
+          city='Damascus';
+        }
         console.log('addpublic  '+address);
         var text=req.payload.text;
         console.log(address);
