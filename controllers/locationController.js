@@ -49,7 +49,7 @@ exports.getlocations={
                       if(citytime!=null)
                       {
                           date=citytime.last_update;
-                          UpdateCityTime(city,new Date(),MyUser.id,function(newcitytime){
+                          UpdateCityTime(citytime,new Date(),MyUser.id,function(newcitytime){
                               console.log('add new citytime  '+newcitytime);
                           });
                       }
