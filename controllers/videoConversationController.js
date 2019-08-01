@@ -80,7 +80,7 @@ exports.addnewroom={
     handler:function(req,res){
     var volunteerid=req.query.id;
     UserController.getUser(volunteerid,function(volunteer){
-      console.log('get all getUnansweredCall   '+volunteer);
+      console.log('get all getUnansweredCall   '+volunteerid+'   '+volunteer);
         if(volunteer!=null&&volunteer.role==UserRole.Volunteer)
         {
             getUnansweredCall(function(calls){
