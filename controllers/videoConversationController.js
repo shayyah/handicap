@@ -19,10 +19,11 @@ exports.addnewroom={
         {
 
                 CreateVideoConversation(id,userid,function(conversation){
+                  closeRoomAfterTime(id);
                     res(conversation);
 
                   //  sendnotification(conversation,user,volunteers);
-                    closeRoomAfterTime(id);
+
                 });
 
 
@@ -94,9 +95,9 @@ exports.addnewroom={
 }
 };
   function GetRoom(id,callback){
-    VideoConversation.findOne({roomid:id},function(err,user){
+    VideoConversation.findOne({roomid:id},function(err,res){
         if(err)callback(null);
-        callback(user);
+        callback(res);
     });
   }
   exports.getRoom = function(id,callback){

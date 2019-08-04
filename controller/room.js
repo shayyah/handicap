@@ -187,7 +187,8 @@ exports.main = {
                       return;
                     }
                   }
-                  VideoController.sendnotification(myRoom,user);
+                  if(user.role==UserRole.Blind)
+                      VideoController.sendnotification(myRoom,user);
                   var params = Common.getRoomParameters(request, roomId, null, null);
                   reply.view('index_template', params);
                 });
