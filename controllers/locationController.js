@@ -28,7 +28,12 @@ exports.getlocations={
            longitude:req.query.longitude,
            latitude:req.query.latitude
          };
-         var city=req.query.city;
+
+         getCityByLocation(UserLocation.longitude,UserLocation.latitude,function(city){
+            console.log('get city done '+city);
+
+      //   var city="";
+        // console.log('get city done '+city);
          if(city==null||city=='')
          {
            city='Damascus';
@@ -84,6 +89,8 @@ exports.getlocations={
              }
              else res({message:'error'});
          });
+
+          });
 }
 };
 exports.addlocation={
@@ -93,7 +100,9 @@ exports.addlocation={
         var latitude=parseFloat(req.payload.latitude);
         var address=req.payload.address;
         var text=req.payload.text;
-        var city=req.payload.city;
+        getCityByLocation(UserLocation.longitude,UserLocation.latitude,function(city){
+           console.log('get city done '+city);
+      //  var city=req.payload.city;
 
         var ispublic=false;
         console.log(address);
@@ -116,8 +125,11 @@ exports.addlocation={
           res({message:'cant add location'});
           }
       });
+
+    });
 }
 };
+
 exports.getmylocations={
   handler:function(req,res){
     var id=req.query.id;
@@ -139,7 +151,8 @@ exports.addpubliclocation={
         var latitude=parseFloat(req.payload.latitude);
         var address=req.payload.address;
         var ispublic=true;
-        var city=req.payload.city;
+        getCityByLocation(UserLocation.longitude,UserLocation.latitude,function(city){
+           console.log('get city done '+city);
         if(city==null||city=='')
         {
           city='Damascus';
@@ -158,6 +171,7 @@ exports.addpubliclocation={
               });
 
   //    });
+});
 }
 };
 exports.deletelocation={
@@ -262,6 +276,20 @@ function AddnewCityTime(city,time,userid,callback)
 
 
 
+}
+function  getCityByLocation(longitude,latitude,callback)
+{
+  geocoder.reverse({lat:latitude, lon:longitude})
+  .then(function(res) {
+    //console.log(res);
+    //console.log(res[0]);
+    callback(res[0].city);
+    //resolve(res);
+  })
+  .catch(function(err) {
+    console.log(err);
+    callback('Damascus');
+  });
 }
 function UpdateCityTime(city,time,userid,callback)
 {

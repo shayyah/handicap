@@ -10,13 +10,14 @@
     "express": "^4.16.4",
     "firebase-admin": "^7.3.0",
     "gridfs-stream": "^1.1.1",
-    "mongodb": "^3.1.13",
-    "mongoose": "^5.4.11",
-    "short-id": "0.1.0-1",
-    "socket.io": "^2.2.0",
     "handlebars": "^4.0.5",
     "hapi": "^12.1.0",
     "inert": "^3.2.0",
+    "mongodb": "^3.1.13",
+    "mongoose": "^5.4.11",
+    "node-geocoder": "^3.23.0",
+    "short-id": "0.1.0-1",
+    "socket.io": "^2.2.0",
     "vision": "^4.0.1"
   },
   "engines": {

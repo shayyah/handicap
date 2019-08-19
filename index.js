@@ -11,6 +11,7 @@ let apiRoutes = require("./api_routes");
 var Hapi = require('hapi');
 var Route = require('./route');
 var Config = require('./config');
+
 var path = require('path');
 //var server = require('http').Server(app);
 var server = new Hapi.Server();
@@ -19,6 +20,18 @@ var serveStatic = require('serve-static');  // serve static files
 var cors = require('cors');
 var fs=require('fs');
 admin = require("firebase-admin");
+
+var NodeGeocoder = require('node-geocoder');
+var options = {
+  provider: 'google',
+
+  // Optional depending on the providers
+  httpAdapter: 'https', // Default
+  apiKey: 'AIzaSyBl4Pzqz_A5zt10KpJI4urZPothek-Y2a8', // for Mapquest, OpenCage, Google Premier
+  formatter: null         // 'gpx', 'string', ...
+};
+
+geocoder = NodeGeocoder(options);
 
 var app = {};
 app.config = Config;
