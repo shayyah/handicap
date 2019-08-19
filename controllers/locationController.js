@@ -100,7 +100,7 @@ exports.addlocation={
         var latitude=parseFloat(req.payload.latitude);
         var address=req.payload.address;
         var text=req.payload.text;
-        getCityByLocation(UserLocation.longitude,UserLocation.latitude,function(city){
+        getCityByLocation(longitude,latitude,function(city){
            console.log('get city done '+city);
       //  var city=req.payload.city;
 
@@ -151,7 +151,7 @@ exports.addpubliclocation={
         var latitude=parseFloat(req.payload.latitude);
         var address=req.payload.address;
         var ispublic=true;
-        getCityByLocation(UserLocation.longitude,UserLocation.latitude,function(city){
+        getCityByLocation(longitude,latitude,function(city){
            console.log('get city done '+city);
         if(city==null||city=='')
         {
