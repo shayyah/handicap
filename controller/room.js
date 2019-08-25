@@ -166,6 +166,7 @@ exports.main = {
   handler: function (request, reply) {
     var roomId = request.params.roomId;
     var userId=request.params.userId;
+    console.log(roomId+'   '+userId);
     UserController.getUser(userId,function(user){
       console.log('mmmmain  '+user);
       if(user!=null&& user.role==UserRole.Blind||user.role==UserRole.Volunteer)
