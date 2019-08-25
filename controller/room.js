@@ -193,7 +193,7 @@ exports.main = {
                   }
                   if(user.role==UserRole.Blind)
                       VideoController.sendnotification(myRoom,user);
-                  var params = Common.getRoomParameters(request, roomId, null, null);
+                  var params = Common.getRoomParameters(request, roomId, userId, null);
                   reply.view('index_template', params);
                 });
 

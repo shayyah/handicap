@@ -19,6 +19,7 @@ exports.addnewroom={
         {
 
                 CreateVideoConversation(id,userid,function(conversation){
+
                   closeRoomAfterTime(id);
                     res(conversation);
 
