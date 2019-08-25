@@ -214,7 +214,7 @@ exports.join = {
     var clientId = request.params.clientId;//Common.generateRandom(8);
     var isLoopback = request.params.debug == 'loopback';
     var response = null;
-    UserController.getRoom(roomId,function(myRoom){
+    VideoController.getRoom(roomId,function(myRoom){
         if(myRoom!=null&&myRoom.isDone!='no'&&myRoom.isDone!='ended')
       {
           addClientToRoom(request, roomId, clientId, isLoopback, function(error, result) {
