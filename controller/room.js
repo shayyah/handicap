@@ -216,7 +216,7 @@ exports.join = {
     var response = null;
     VideoController.getRoom(roomId,function(myRoom){
         if(myRoom!=null&&myRoom.isDone!='no'&&myRoom.isDone!='ended')
-      {
+        {
           addClientToRoom(request, roomId, clientId, isLoopback, function(error, result) {
             if (error) {
               console.error('Error adding client to room: ' + error + ', room_state=' + result.room_state);
@@ -242,11 +242,8 @@ exports.join = {
           });
         }
         else {
-          response = {
-            result: error,
-            params: result
-          };
-          reply(JSON.stringify(response));
+
+            reply('').code(500);
 
           return;
         }
