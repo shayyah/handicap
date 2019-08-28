@@ -13,6 +13,10 @@ var videoConversationSchema=mongoose.Schema({
       type:String,
       required:false
     },
+    userName:{
+      type:String,
+      required:false
+    },
     isDone:{
       type:String,
       required:false

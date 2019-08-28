@@ -18,7 +18,7 @@ exports.addnewroom={
         if(user!=null&&user.role==UserRole.Blind)
         {
 
-                CreateVideoConversation(id,userid,function(conversation){
+                CreateVideoConversation(id,userid,user.name,function(conversation){
 
                   closeRoomAfterTime(id);
                     res(conversation);
@@ -195,13 +195,14 @@ return new Promise(resolve=>{
       });
   }
 
-  function CreateVideoConversation(vroomid,vuserid,callback)
+  function CreateVideoConversation(vroomid,vuserid,name,callback)
   {
       var conv=new VideoConversation();
       conv.roomid=vroomid;
       conv.userid=vuserid;
       conv.advisorid='';
       conv.isDone='';
+      conv.userName=name;
       conv.save(function(err){
         if(err)callback(err);
         console.log('conv  inserted   '+JSON.stringify(conv));
