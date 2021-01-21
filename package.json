@@ -17,7 +17,7 @@
     "mongoose": "^5.4.11",
     "node-geocoder": "^3.23.0",
     "short-id": "0.1.0-1",
-    "socket.io": "^2.2.0",
+    "socket.io": "^2.4.0",
     "vision": "^4.0.1"
   },
   "engines": {
